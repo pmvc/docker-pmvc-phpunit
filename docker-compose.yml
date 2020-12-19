@@ -1,0 +1,5 @@
+version: '3'
+
+services:
+  phpunit:
+    image: hillliu/pmvc-phpunit
