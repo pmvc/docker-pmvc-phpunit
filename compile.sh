@@ -1,26 +1,40 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 DIR="$( cd "$(dirname "$0")" ; pwd -P )"
 sourceImage=`${DIR}/support/sourceImage.sh`
 targetImage=`${DIR}/support/targetImage.sh`
 archiveFile=$DIR/archive.tar
+VERSION=`${DIR}/support/VERSION.sh`
+
+list(){
+  docker images | head -10 
+}
 
 tag(){
   tag=$1
-  if [ -z $tag ]; then
-    tag=latest
+  if [ -z "$tag" ]; then
+    if [ -z "$VERSION" ]; then
+      tag=latest
+    else
+      tag=$VERSION
+    fi
   fi
-  echo "* <!-- Start to tag"
+  echo "* <!-- Start to tag: ${tag}"
   echo $tag
   docker tag $sourceImage ${targetImage}:$tag
-  docker images | head -10 
+  list
   echo "* Finish tag -->"
 }
 
 push(){
-  echo "* <!-- Start to push"
+  if [ -z "$VERSION" ]; then
+    tag=latest
+  else
+    tag=$VERSION
+  fi
+  echo "* <!-- Start to push ${tag}"
   docker login
-  docker push ${targetImage}
+  docker push ${targetImage}:$tag
   echo "* Finish to push -->"
 }
 
@@ -30,7 +44,13 @@ build(){
   else  
     NO_CACHE="--no-cache"
   fi  
-  docker build ${NO_CACHE} -f ${DIR}/Dockerfile -t $sourceImage ${DIR}
+  if [ -z "$VERSION" ]; then
+    BUILD_ARG=""
+  else
+    BUILD_ARG="--build-arg VERSION=${VERSION}"
+  fi
+  docker build ${BUILD_ARG} ${NO_CACHE} -f ${DIR}/Dockerfile -t $sourceImage ${DIR}
+  list
 }
 
 save() {
@@ -60,14 +80,17 @@ case "$1" in
     build --no-cache
     ;;
   auto)
-    build $2
+    build
     tag
     ;;
   b)  
-    build $2
+    build
+    ;;
+  l)
+    list
     ;;
   *)
-    echo "$0 [save|restore|p|t|nocache|auto|b]" 
+    echo "$0 [save|restore|p|t|nocache|auto|b|l]" 
     exit
 esac
 
