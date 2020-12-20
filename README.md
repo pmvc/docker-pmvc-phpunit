@@ -1,10 +1,10 @@
-Node official Alpine with bash
+PHP with phpunit and pmvc
 ======
 
 ## GIT
-   * https://github.com/HillLiu/docker-node-bash-alpine
+   * https://github.com/pmvc/docker-pmvc-phpunit
 
 ## Docker hub
-   * hillliu/node-bash-alpine
-   * https://hub.docker.com/r/hillliu/node-bash-alpine
+   * hillliu/pmvc-phpunit
+   * https://hub.docker.com/r/hillliu/pmvc-phpunit
 
