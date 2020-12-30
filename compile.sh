@@ -27,6 +27,9 @@ tag(){
 }
 
 push(){
+  if [ ! -z "$1" ]; then
+    VERSION=$1
+  fi  
   if [ -z "$VERSION" ]; then
     tag=latest
   else
@@ -71,7 +74,7 @@ case "$1" in
     restore
     ;;
   p)
-    push
+    push $2
     ;;
   t)
     tag $2 
