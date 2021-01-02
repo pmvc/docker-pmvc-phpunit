@@ -2,7 +2,7 @@ ARG VERSION=${VERSION:-5.6.40}
 
 FROM php:${VERSION}-fpm-alpine
 
-ARG VERSION=${VERSION:-5.6.40}
+ARG VERSION
 
 RUN apk update && apk add bash && rm -rf /var/cache/apk/*
 
