@@ -16,5 +16,6 @@ RUN echo PHP Version: $VERSION && php -v
 RUN if [[ "x$VERSION" != "x8.0.0" ]] ; then composer global require phpunit/phpunit 4.8.35 ; \ 
   else composer global require --ignore-platform-req=php phpunit/phpunit 9.5.0; fi
 RUN composer global require pmvc/pmvc-cli
+RUN docker-php-ext-install pcntl
 ENV PATH="/root/.composer/vendor/bin:${PATH}"
-
+WORKDIR /var/www/html
