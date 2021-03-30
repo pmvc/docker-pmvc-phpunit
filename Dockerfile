@@ -18,4 +18,9 @@ RUN if [[ "x$VERSION" != "x8.0.0" ]] ; then composer global require phpunit/phpu
 RUN composer global require pmvc/pmvc-cli
 RUN docker-php-ext-install pcntl
 ENV PATH="/root/.composer/vendor/bin:${PATH}"
+
+# fixed timezone
+# https://stackoverflow.com/questions/45587214/configure-timezone-in-dockerized-nginx-php-fpm/45587945
+RUN printf '[PHP]\ndate.timezone = "UTC"\n' > /usr/local/etc/php/conf.d/tzone.ini
+
 WORKDIR /var/www/html
