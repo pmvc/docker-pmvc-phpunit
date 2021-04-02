@@ -15,7 +15,8 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&
 
 RUN mv composer.phar /usr/local/bin/composer
 RUN echo PHP Version: $VERSION && php -v
-RUN if [[ "x$VERSION" != "x8.0.0" ]] ; then composer global require phpunit/phpunit 4.8.35 ; \ 
+RUN if [[ "x$VERSION" == "x5.6" ]] ; then composer global require phpunit/phpunit 4.8.35 ; \
+  elif [[ "x$VERSION" == "x7.2" ]] ; then composer global require phpunit/phpunit 6.5.5 ; \
   else composer global require --ignore-platform-req=php phpunit/phpunit 9.5.0; fi
 RUN composer global require pmvc/pmvc-cli
 ENV PATH="/root/.composer/vendor/bin:${PATH}"
