@@ -8,6 +8,10 @@ There are thee major php version.
 * PHP 7.2 [7.3, 7.4] use phpunit 6.5.5
 * php 8 use phpunit 9.5.0
 
+## Features
+* support utc timezone without date_default_timezone_set
+* support phpunit
+* support pmvc command line
 
 ## GIT
    * https://github.com/pmvc/docker-pmvc-phpunit
