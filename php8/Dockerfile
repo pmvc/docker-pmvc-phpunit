@@ -1,4 +1,4 @@
-ARG VERSION=${VERSION:-[VERSION]}
+ARG VERSION=${VERSION:-8}
 
 FROM php:${VERSION}-fpm-alpine
 
