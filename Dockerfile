@@ -18,8 +18,9 @@ RUN echo PHP Version: $VERSION && php -v
 RUN if [[ "x$VERSION" == "x5.6" ]] ; then composer global require phpunit/phpunit 4.8.35 ; \
   elif [[ "x$VERSION" == "x7.2" ]] ; then composer global require phpunit/phpunit 6.5.5 ; \
   else composer global require --ignore-platform-req=php phpunit/phpunit 9.5.0; fi
-RUN composer global require pmvc/pmvc-cli
+
 ENV PATH="/root/.composer/vendor/bin:${PATH}"
+RUN composer global require pmvc/pmvc-cli
 
 # fixed timezone
 # https://stackoverflow.com/questions/45587214/configure-timezone-in-dockerized-nginx-php-fpm/45587945
