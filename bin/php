@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
+MY_PWD=$(pwd)
+
 docker run --rm \
+  -v $MY_PWD:$MY_PWD \
+  -w $MY_PWD \
   --name phpunit hillliu/pmvc-phpunit \
-  php $*
+  echo "php '"$*"'" | bash 
   
