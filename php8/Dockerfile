@@ -6,6 +6,7 @@ ARG VERSION
 
 RUN apk update && apk add bash \
   && docker-php-ext-install pcntl \
+  && docker-php-ext-install sockets \
   && rm -rf /var/cache/apk/*
 
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \

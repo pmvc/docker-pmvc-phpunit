@@ -7,7 +7,7 @@ do_build() {
   echo "building --- Version: " $VER "-->";
   DEST_FILE=${DIR}/php$VER/Dockerfile
   cp Dockerfile ${DEST_FILE}
-  sed -i '' -e "s|\[VERSION\]|$VER|g" ${DEST_FILE}
+  sed -i'' -e "s|\[VERSION\]|$VER|g" ${DEST_FILE}
 }
 
 do_build 8
