@@ -1,6 +1,20 @@
 #!/usr/bin/env bash
 
-docker run --rm \
-  --name phpunit hillliu/pmvc-phpunit \
-  composer $*
-  
+MY_PWD=$(pwd)
+
+C=''
+for i in "$@"; do 
+    i="${i//\\/\\\\}"
+    C="$C \"${i//\"/\\\"}\""
+done
+
+pid=$$
+
+cli='env docker run --rm';
+cli+=" -v $MY_PWD:$MY_PWD";
+cli+=" -w $MY_PWD";
+cli+=" -u $(id -u):$(id -g)";
+cli+=" --name phpunit-${pid} hillliu/pmvc-phpunit";
+cli+=" composer ${C}";
+
+bash -c "$cli";
