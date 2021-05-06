@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+MY_PWD=$(pwd)
+
+C=''
+for i in "$@"; do 
+    i="${i//\\/\\\\}"
+    C="$C \"${i//\"/\\\"}\""
+done
+
+pid=$$
+
+cli='env docker run --rm -it';
+cli+=" -v $MY_PWD:$MY_PWD";
+cli+=" -v /git/pmvc-git/pmvc/pmvc-cli/bin/pmvc:/root/.composer/vendor/pmvc/pmvc-cli/bin/pmvc"
+cli+=" -w $MY_PWD";
+cli+=" --name phpunit-${pid} hillliu/pmvc-phpunit"
+cli+=" bash ${C}"
+
+bash -c "$cli";
