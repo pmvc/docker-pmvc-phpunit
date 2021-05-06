@@ -41,6 +41,9 @@ RUN apk add \
   libstdc++ \
   libgcc
 
+# nodejs
+RUN apk add nodejs npm yarn
+
 # clean
 RUN apk del .build-deps && rm -rf /var/cache/apk/*
 
