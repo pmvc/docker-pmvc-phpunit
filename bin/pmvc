@@ -15,16 +15,21 @@ if [ -z "$MOUNT" ]; then
 MOUNT=$MY_PWD
 fi
 
+C=''
+for i in "$@"; do 
+    i="${i//\\/\\\\}"
+    C="$C \"${i//\"/\\\"}\""
+done
+
 pid=$$
 
 cli='env docker run --rm';
 cli+=" -v $MY_PWD:$MY_PWD";
 cli+=" -v $MOUNT:$MOUNT";
-cli+=" -w $MOUNT";
+cli+=" -w $MY_PWD";
 cli+=" -u $(id -u):$(id -g)";
 cli+=" --name phpunit-${pid} hillliu/pmvc-phpunit"
 cli+=" pmvc ${C}"
 
 bash -c "$cli";
 
-  
