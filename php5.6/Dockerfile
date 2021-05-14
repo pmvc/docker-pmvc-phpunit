@@ -26,7 +26,6 @@ RUN apk update
 RUN apk add --virtual .build-deps musl-dev \
   && if [[ "x$VERSION" != "x5.6" ]] ; then \
   apk add --virtual .build-deps \ 
-  musl-dev \
   lapack-dev \
   libexecinfo-dev \
   openblas-dev \
