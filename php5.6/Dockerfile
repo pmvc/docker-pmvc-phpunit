@@ -23,11 +23,14 @@ COPY --from=builder \
 RUN apk update
 
 # tensor
-RUN apk add --virtual .build-deps \ 
+RUN apk add --virtual .build-deps musl-dev \
+  && if [[ "x$VERSION" != "x5.6" ]] ; then \
+  apk add --virtual .build-deps \ 
   musl-dev \
   lapack-dev \
   libexecinfo-dev \
-  openblas-dev
+  openblas-dev \
+  ; fi
 
 RUN apk add \ 
   bash \
