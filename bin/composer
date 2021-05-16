@@ -12,7 +12,7 @@ pid=$$
 
 cli='env docker run --rm';
 cli+=" -v $MY_PWD:$MY_PWD";
-cli+=" -v $HOME/.composer:/usr/local/.composer";
+cli+=" -v $HOME/.composer:/.composer";
 cli+=" -w $MY_PWD";
 cli+=" -u $(id -u):$(id -g)";
 cli+=" --name phpunit-${pid} hillliu/pmvc-phpunit";
