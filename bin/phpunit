@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 MY_PWD=$(pwd)
+VERSION=${VERSION:-latest}
+CMD=${CMD:-phpunit}
 
 C=''
 for i in "$@"; do 
@@ -11,9 +13,12 @@ done
 pid=$$
 
 cli='env docker run --rm';
+if [ "xbash" == "x$CMD" ]; then
+  cli+=" -it";
+fi
 cli+=" -v $MY_PWD:$MY_PWD";
 cli+=" -w $MY_PWD";
-cli+=" --name phpunit-${pid} hillliu/pmvc-phpunit"
-cli+=" phpunit ${C}"
+cli+=" --name phpunit-${pid} hillliu/pmvc-phpunit:${VERSION}"
+cli+=" $CMD ${C}"
 
 bash -c "$cli";
