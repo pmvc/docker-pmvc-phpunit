@@ -61,7 +61,7 @@ RUN if [[ "x$VERSION" == "x5.6" ]] ; then composer global require phpunit/phpuni
   elif [[ "x$VERSION" == "x7.2" ]] ; then composer global require phpunit/phpunit 6.5.5 ; \
   else composer global require --ignore-platform-req=php phpunit/phpunit 9.5.0; fi
 
-RUN composer global require pmvc/pmvc-cli:^0.3.4 \
+RUN composer global require pmvc/pmvc-cli:^0.4.1 \
   && chmod 0777 /.composer \
   && chmod 0777 -R /.composer/cache \
   && ln -s /.composer/vendor/bin/pmvc /usr/local/bin/ \
