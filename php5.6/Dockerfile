@@ -55,7 +55,11 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php -r "unlink('composer-setup.php');" \
     && mv composer.phar /usr/local/bin/composer
 
-ENV COMPOSER_HOME=/.composer
+ENV COMPOSER_HOME=/.composer \
+    LANG=en_US.UTF-8 \
+    LANGUAGE=en_US:en \ 
+    LC_ALL=en_US.UTF-8
+
 RUN echo PHP Version: $VERSION && php -v
 RUN if [[ "x$VERSION" == "x5.6" ]] ; then composer global require phpunit/phpunit 4.8.35 ; \
   elif [[ "x$VERSION" == "x7.2" ]] ; then composer global require phpunit/phpunit 6.5.5 ; \
