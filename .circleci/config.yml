@@ -34,10 +34,18 @@ jobs:
             ./compile.sh p << parameters.docker-tag >>
 
 workflows:
-  run-node-tests:
+  run-job:
     jobs:
       - build-and-publish:
           matrix:
             name: test-<< matrix.test-dir >>
             parameters:
               docker-tag: ["latest", "8"]
+  nightly:
+    triggers:
+      - schedule:
+          cron: "0 0 1 * *"
+          filters:
+            branches:
+              only:
+                - main
