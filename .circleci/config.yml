@@ -8,7 +8,7 @@ executors:
 jobs:
   build-and-publish:
     parameters:
-      test-dir:
+      docker-tag:
         type: string
     executor: docker-publisher
     steps:
@@ -22,7 +22,7 @@ jobs:
       - run:
           name: Publish Docker Image to Docker Hub
           command: |
-            ./compile.sh p 
+            ./compile.sh p << parameters.docker-tag >> 
 
 workflows:
   run-node-tests:
@@ -31,4 +31,4 @@ workflows:
           matrix:
             name: test-<< matrix.test-dir >>
             parameters:
-              test-dir: ["./"]
+              docker-tag: ["latest"]
