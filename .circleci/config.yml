@@ -53,7 +53,7 @@ workflows:
               docker-tag: ["latest", "8"]
     triggers:
       - schedule:
-          cron: "0 21 * * *"
+          cron: "0 0 1 * *"
           filters:
             branches:
               only:
