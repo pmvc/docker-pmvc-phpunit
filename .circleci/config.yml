@@ -40,4 +40,4 @@ workflows:
           matrix:
             name: test-<< matrix.test-dir >>
             parameters:
-              docker-tag: ["8"]
+              docker-tag: ["latest", "8"]

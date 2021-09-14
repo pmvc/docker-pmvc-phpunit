@@ -23,7 +23,7 @@ COPY --from=builder \
 RUN apk update && apk add bash
 
 # tensor
-RUN apk add --virtual .build-deps musl-dev \
+RUN echo $VERSION && apk add --virtual .build-deps musl-dev \
   && if [[ "x$VERSION" != "x5.6" ]] ; then \
   apk add --virtual .build-deps \ 
   lapack-dev \
@@ -58,7 +58,7 @@ ENV COMPOSER_HOME=/.composer \
     LANGUAGE=en_US:en \ 
     LC_ALL=en_US.UTF-8
 
-RUN echo PHP Version: $VERSION && php -v
+RUN echo Build Version: $VERSION && php -v
 RUN if [[ "x$VERSION" == "x5.6" ]] ; then composer global require phpunit/phpunit 4.8.35 ; \
   elif [[ "x$VERSION" == "x7.2" ]] ; then composer global require phpunit/phpunit 6.5.5 ; \
   else composer global require --ignore-platform-req=php phpunit/phpunit 9.5.0; fi
