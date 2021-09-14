@@ -13,11 +13,12 @@ jobs:
     executor: docker-publisher
     steps:
       - checkout
-      - setup_remote_docker
+      - setup_remote_docker:
+          version: 20.10.7
       - run:
           name: build Docker image
           command: |
-            ./compile.sh b 
+            ./compile.sh b
 
 workflows:
   run-node-tests:
