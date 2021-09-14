@@ -36,7 +36,7 @@ push(){
     tag=$VERSION
   fi
   echo "* <!-- Start to push ${tag}"
-  echo "$DOCKER_PASSWORD" | dockor login -u "$DOCKER_LOGIN" --password-stdin
+  echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_LOGIN" --password-stdin
   docker push ${targetImage}:$tag
   echo "* Finish to push -->"
 }
