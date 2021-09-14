@@ -20,7 +20,7 @@ COPY --from=builder \
     /usr/local/bin/svm-scale \
     /usr/local/bin/
 
-RUN apk update
+RUN apk update && apk add bash
 
 # tensor
 RUN apk add --virtual .build-deps musl-dev \
@@ -31,9 +31,7 @@ RUN apk add --virtual .build-deps musl-dev \
   openblas-dev \
   ; fi
 
-RUN apk add \ 
-  bash \
-  && docker-php-ext-install \
+RUN docker-php-ext-install \
   pcntl \
   sockets
 
