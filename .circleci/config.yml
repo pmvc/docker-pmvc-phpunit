@@ -18,6 +18,9 @@ jobs:
       - setup_remote_docker:
           version: 20.10.7
       - run:
+          name: Log time
+          command: date
+      - run:
           name: Gen Docker file
           command: |
             ./build.sh << parameters.docker-tag >>
