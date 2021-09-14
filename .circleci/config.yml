@@ -1,0 +1,29 @@
+version: 2.1
+
+executors:
+  docker-publisher:
+    docker:
+      - image: circleci/buildpack-deps:stretch
+
+jobs:
+  build-and-publish:
+    parameters:
+      test-dir:
+        type: string
+    executor: docker-publisher
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: build Docker image
+          command: |
+            ./compile.sh b 
+
+workflows:
+  run-node-tests:
+    jobs:
+      - build-and-publish:
+          matrix:
+            name: test-<< matrix.test-dir >>
+            parameters:
+              test-dir: ["./"]
