@@ -18,19 +18,19 @@ jobs:
       - setup_remote_docker:
           version: 20.10.7
       - run:
-          name: Gen Docker file 
+          name: Gen Docker file
           command: |
             ./build.sh << parameters.docker-tag >>
       - run:
           name: build Docker image
           command: |
             docker build -f php-<< parameters.docker-tag >>/Dockerfile \
-              -t $IMAGE_NAME:<< parameters.docker-tag >> \ 
+              -t $IMAGE_NAME:<< parameters.docker-tag >> \
               ./php-<< parameters.docker-tag >>
               #      - run:
               #          name: Publish Docker Image to Docker Hub
               #          command: |
-              #            ./compile.sh p << parameters.docker-tag >> 
+              #            ./compile.sh p << parameters.docker-tag >>
 
 workflows:
   run-node-tests:

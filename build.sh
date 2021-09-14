@@ -6,7 +6,6 @@ do_build() {
   VER=$1
   DEST_FOLDER=${DIR}/php-$VER
   mkdir -p ${DEST_FOLDER}
-  cp $DIR/compile.sh ${DEST_FOLDER}
   echo "building --- Version: " $VER "-->";
   DEST_FILE=${DEST_FOLDER}/Dockerfile
   cp Dockerfile ${DEST_FILE}
