@@ -21,16 +21,17 @@ jobs:
           name: Gen Docker file
           command: |
             ./build.sh << parameters.docker-tag >>
+            ls -la php-<< parameters.docker-tag >>
       - run:
           name: build Docker image
           command: |
             docker build -f php-<< parameters.docker-tag >>/Dockerfile \
               -t $IMAGE_NAME:<< parameters.docker-tag >> \
               ./php-<< parameters.docker-tag >>
-              #      - run:
-              #          name: Publish Docker Image to Docker Hub
-              #          command: |
-              #            ./compile.sh p << parameters.docker-tag >>
+      - run:
+          name: Publish Docker Image to Docker Hub
+          command: |
+            ./compile.sh p << parameters.docker-tag >>
 
 workflows:
   run-node-tests:
