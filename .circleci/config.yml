@@ -41,7 +41,6 @@ workflows:
             name: test-<< matrix.test-dir >>
             parameters:
               docker-tag: ["latest", "8"]
-  nightly:
     triggers:
       - schedule:
           cron: "0 0 1 * *"
