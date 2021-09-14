@@ -19,6 +19,10 @@ jobs:
           name: build Docker image
           command: |
             ./compile.sh b
+      - run:
+          name: Publish Docker Image to Docker Hub
+          command: |
+            ./compile.sh p 
 
 workflows:
   run-node-tests:
