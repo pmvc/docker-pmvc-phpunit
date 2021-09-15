@@ -1,6 +1,8 @@
 PHP with phpunit and pmvc
 ======
 
+[![CircleCI](https://circleci.com/gh/pmvc/docker-pmvc-phpunit/tree/main.svg?style=svg)](https://circleci.com/gh/pmvc/docker-pmvc-phpunit/tree/main)
+
 ## phpunit version
 
 There are thee major php version.
