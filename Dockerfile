@@ -24,7 +24,7 @@ RUN apk update && apk add bash
 
 # tensor
 RUN echo $VERSION && apk add --virtual .build-deps musl-dev bc \
-  && if (( $(echo "$VERSION >= 7.4" | bc -l) )) ; then \
+  && if [[ $(echo "$VERSION >= 7.4" | bc -l) == 1 ]] ; then \
   apk add --virtual .build-deps \ 
   lapack-dev \
   libexecinfo-dev \
@@ -42,7 +42,9 @@ RUN apk add \
   libgcc
 
 # nodejs
-RUN apk add nodejs npm yarn
+RUN if [[ $(echo "$VERSION == 7.0" | bc -l) == 1 ]] ; then apk add nodejs yarn; \
+  elif [[ $(echo "$VERSION == 5.5" | bc -l) == 1 ]] ; then apk add nodejs; \
+  else apk add nodejs npm yarn; fi
 
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php -r "if (hash_file('sha384', 'composer-setup.php') === '756890a4488ce9024fc62c56153228907f1545c228516cbf63f885e036d37e9a59d27d63f46af1d4d07ee0f76181c7d3') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
@@ -56,8 +58,8 @@ ENV COMPOSER_HOME=/.composer \
     LC_ALL=en_US.UTF-8
 
 RUN echo Build Version: $VERSION && php -v
-RUN if (( $(echo "$VERSION <= 7.1" | bc -l) )) ; then composer global require phpunit/phpunit 4.8.35 ; \
-  elif (( $(echo "$VERSION <= 7.4" | bc -l) )) ; then composer global require phpunit/phpunit 6.5.5 ; \
+RUN if [[ $(echo "$VERSION <= 7.1" | bc -l) == 1 ]] ; then composer global require phpunit/phpunit 4.8.35 ; \
+  elif [[ $(echo "$VERSION <= 7.4" | bc -l) == 1 ]] ; then composer global require phpunit/phpunit 6.5.5 ; \
   else composer global require --ignore-platform-req=php phpunit/phpunit 9.5.0; fi
 
 # clean
