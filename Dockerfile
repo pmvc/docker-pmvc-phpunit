@@ -20,10 +20,10 @@ COPY --from=builder \
     /usr/local/bin/svm-scale \
     /usr/local/bin/
 
-RUN apk update && apk add bash
+RUN apk update && apk add bash bc
 
 # tensor
-RUN echo $VERSION && apk add --virtual .build-deps musl-dev bc \
+RUN echo $VERSION && apk add --virtual .build-deps musl-dev \
   && if [[ $(echo "$VERSION >= 7.4" | bc -l) == 1 ]] ; then \
   apk add --virtual .build-deps \ 
   lapack-dev \
