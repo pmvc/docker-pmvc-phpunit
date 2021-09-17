@@ -33,7 +33,8 @@ RUN echo $VERSION \
 
 # xdebug
 RUN if [[ $(echo "$VERSION >= 7.2" | bc -l) == 1 ]] ; then \
-    apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS \
+    apk add git \
+    && apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS \
     && pecl install xdebug-3.0.4 \
     && docker-php-ext-enable xdebug \
     && apk del -f .phpize-deps \
@@ -71,6 +72,7 @@ RUN if [[ $(echo "$VERSION <= 7.1" | bc -l) == 1 ]] ; then composer global requi
   else composer global require --ignore-platform-req=php \
     phpunit/phpunit 9.5.0 \
     php-coveralls/php-coveralls \
+    && ln -s /.composer/vendor/bin/php-coveralls /usr/local/bin/coveralls \
   ; fi
 
 # clean
