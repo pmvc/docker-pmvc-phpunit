@@ -20,16 +20,24 @@ COPY --from=builder \
     /usr/local/bin/svm-scale \
     /usr/local/bin/
 
-RUN apk update && apk add bash bc
+RUN apk update && apk add bash bc && apk add --virtual .build-deps musl-dev
 
 # tensor
-RUN echo $VERSION && apk add --virtual .build-deps musl-dev \
+RUN echo $VERSION \
   && if [[ $(echo "$VERSION >= 7.4" | bc -l) == 1 ]] ; then \
   apk add --virtual .build-deps \ 
   lapack-dev \
   libexecinfo-dev \
   openblas-dev \
   ; fi
+
+# xdebug
+RUN if [[ $(echo "$VERSION >= 7.2" | bc -l) == 1 ]] ; then \
+    apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS \
+    && pecl install xdebug-3.0.4 \
+    && docker-php-ext-enable xdebug \
+    && apk del -f .phpize-deps \
+    ; fi
 
 RUN docker-php-ext-install \
   pcntl \
@@ -63,7 +71,7 @@ RUN if [[ $(echo "$VERSION <= 7.1" | bc -l) == 1 ]] ; then composer global requi
   else composer global require --ignore-platform-req=php phpunit/phpunit 9.5.0; fi
 
 # clean
-RUN apk del .build-deps && rm -rf /var/cache/apk/*
+RUN apk del -f .build-deps && rm -rf /var/cache/apk/*
 
 RUN composer global require pmvc/pmvc-cli:^0.4.1 \
   && chmod 0777 /.composer \
