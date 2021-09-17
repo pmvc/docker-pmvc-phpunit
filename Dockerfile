@@ -68,7 +68,10 @@ ENV COMPOSER_HOME=/.composer \
 RUN echo Build Version: $VERSION && php -v
 RUN if [[ $(echo "$VERSION <= 7.1" | bc -l) == 1 ]] ; then composer global require phpunit/phpunit 4.8.35 ; \
   elif [[ $(echo "$VERSION <= 7.4" | bc -l) == 1 ]] ; then composer global require phpunit/phpunit 6.5.5 ; \
-  else composer global require --ignore-platform-req=php phpunit/phpunit 9.5.0; fi
+  else composer global require --ignore-platform-req=php \
+    phpunit/phpunit 9.5.0 \
+    php-coveralls/php-coveralls \
+  ; fi
 
 # clean
 RUN apk del -f .build-deps && rm -rf /var/cache/apk/*
