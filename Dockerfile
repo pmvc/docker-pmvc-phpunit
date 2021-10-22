@@ -79,7 +79,7 @@ RUN if [[ $(echo "$VERSION <= 7.1" | bc -l) == 1 ]] ; then composer global requi
 # clean
 RUN apk del -f .build-deps && rm -rf /var/cache/apk/*
 
-RUN composer global require pmvc/pmvc-cli:^0.4.1 \
+RUN composer global require pmvc/pmvc-cli:^0.5.1 \
   && chmod 0777 /.composer \
   && chmod 0777 -R /.composer/cache \
   && ln -s /.composer/vendor/bin/pmvc /usr/local/bin/ \
