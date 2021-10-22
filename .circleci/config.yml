@@ -24,6 +24,7 @@ jobs:
           name: Gen Docker file
           command: |
             ./build.sh << parameters.docker-tag >>
+            cp ./cacert.pem ./php-<< parameters.docker-tag >>
             ls -la php-<< parameters.docker-tag >>
       - run:
           name: build Docker image

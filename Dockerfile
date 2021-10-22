@@ -51,8 +51,9 @@ RUN apk add \
   libgcc
 
 # nodejs
+COPY ./cacert.pem /usr/local/share/ca-certificates/cacert.pem
 RUN if [[ $(echo "$VERSION == 7.0" | bc -l) == 1 ]] ; then apk add nodejs yarn; \
-  elif [[ $(echo "$VERSION == 5.5" | bc -l) == 1 ]] ; then apk add nodejs; \
+  elif [[ $(echo "$VERSION == 5.5" | bc -l) == 1 ]] ; then apk --no-cache add nodejs ca-certificates && update-ca-certificates; \
   else apk add nodejs npm yarn; fi
 
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
