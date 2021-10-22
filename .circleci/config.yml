@@ -41,14 +41,14 @@ workflows:
     jobs:
       - build-and-publish:
           matrix:
-            name: test-<< matrix.test-dir >>
+            name: test-<< matrix.docker-tag >>
             parameters:
               docker-tag: ["8", "7.4", "7.3", "7.2", "7.1", "7.0", "5.6", "5.5"]
   nightly:
     jobs:
       - build-and-publish:
           matrix:
-            name: test-<< matrix.test-dir >>
+            name: test-<< matrix.docker-tag >>
             parameters:
               docker-tag: ["8", "7.4", "7.3", "7.2", "7.1", "7.0", "5.6", "5.5"]
     triggers:
