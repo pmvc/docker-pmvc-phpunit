@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 MY_PWD=$(pwd)
+CMD=${CMD:-pmvc}
 
 BASE_DIRECTORY=$(echo "$MY_PWD" | cut -d "/" -f2)
 
@@ -33,12 +34,14 @@ done
 pid=$$
 
 cli='env docker run --rm';
+if [ "xbash" == "x$CMD" ]; then
+  cli+=" -it";
+fi
 cli+=" -v $MY_PWD:$MY_PWD";
 cli+=" -v $MOUNT:$MOUNT";
 cli+=" -w $MY_PWD";
 cli+=" -u $(id -u):$(id -g)";
 cli+=" --name phpunit-${pid} hillliu/pmvc-phpunit"
-cli+=" pmvc ${C}"
+cli+=" $CMD ${C}"
 
 bash -c "$cli";
-
