@@ -20,7 +20,18 @@ COPY --from=builder \
     /usr/local/bin/svm-scale \
     /usr/local/bin/
 
-RUN apk update && apk add bash bc && apk add --virtual .build-deps musl-dev
+RUN apk update && apk add \
+  bash \
+  bc \
+  && apk add --virtual .build-deps \
+  musl-dev \
+  autoconf \
+  postgresql-dev
+
+RUN docker-php-ext-install \
+  pcntl \
+  sockets \
+  pdo_pgsql
 
 # tensor
 RUN echo $VERSION \
@@ -40,9 +51,6 @@ RUN if [[ $(echo "$VERSION >= 7.2" | bc -l) == 1 ]] ; then \
     && apk del -f .phpize-deps \
     ; fi
 
-RUN docker-php-ext-install \
-  pcntl \
-  sockets
 
 # svm library
 RUN apk add \ 
