@@ -23,6 +23,7 @@ COPY --from=builder \
 RUN apk update && apk add \
   bash \
   bc \
+  postgresql-libs \
   && apk add --virtual .build-deps \
   musl-dev \
   autoconf \
