@@ -36,6 +36,12 @@ jobs:
           name: Publish Docker Image to Docker Hub
           command: |
             ./compile.sh p << parameters.docker-tag >>
+      - run:
+          name: Trigger pmvc to test docker image
+          command: |
+            curl --location --request POST 'https://circleci.com/api/v2/project/github/pmvc/pmvc/pipeline' \
+            --header 'Content-Type: application/json' \
+            -u "${API_TOKEN}"
 
 workflows:
   run-job:
