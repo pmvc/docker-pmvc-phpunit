@@ -36,26 +36,31 @@ jobs:
           name: Publish Docker Image to Docker Hub
           command: |
             ./compile.sh p << parameters.docker-tag >>
+  trigger-pmvc:
+    executor: docker-publisher
+    steps:
       - run:
           name: Trigger pmvc to test docker image
+          # https://app.circleci.com/settings/user/tokens
           command: |
-            curl --location --request POST 'https://circleci.com/api/v2/project/github/pmvc/pmvc/pipeline' \
-            --header 'Content-Type: application/json' \
-            -u "${API_TOKEN}"
+            curl -X POST --url https://circleci.com/api/v2/project/github/pmvc/pmvc/pipeline \
+               --header "Content-Type: application/json" \
+               --header "Circle-Token: $CIRCLE_TOKEN"
 
 workflows:
   run-job:
     jobs:
       - build-and-publish:
           matrix:
-            name: test-<< matrix.docker-tag >>
             parameters:
               docker-tag: ["8", "7.4", "7.3", "7.2", "7.1", "7.0", "5.6", "5.5"]
+      - trigger-pmvc:
+          requires:
+            - build-and-publish
   nightly:
     jobs:
       - build-and-publish:
           matrix:
-            name: test-<< matrix.docker-tag >>
             parameters:
               docker-tag: ["8", "7.4", "7.3", "7.2", "7.1", "7.0", "5.6", "5.5"]
     triggers:
