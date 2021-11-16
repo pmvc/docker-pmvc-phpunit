@@ -32,7 +32,8 @@ RUN apk update && apk add \
 RUN docker-php-ext-install \
   pcntl \
   sockets \
-  pdo_pgsql
+  pdo_pgsql \
+  pdo_mysql
 
 # tensor
 RUN echo $VERSION \
