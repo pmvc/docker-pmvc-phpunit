@@ -59,10 +59,7 @@ workflows:
             - build-and-publish
   nightly:
     jobs:
-      - build-and-publish:
-          matrix:
-            parameters:
-              docker-tag: ["8", "7.4", "7.3", "7.2", "7.1", "7.0", "5.6", "5.5"]
+      - trigger-pmvc
     triggers:
       - schedule:
           cron: "0 0 1 * *"
