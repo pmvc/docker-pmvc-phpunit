@@ -10,13 +10,7 @@ ARG VERSION
 
 COPY --from=builder \
     /usr/local/bin/svm-train \
-    /usr/local/bin/
-
-COPY --from=builder \
     /usr/local/bin/svm-predict \
-    /usr/local/bin/
-
-COPY --from=builder \
     /usr/local/bin/svm-scale \
     /usr/local/bin/
 
@@ -53,7 +47,6 @@ RUN if [[ $(echo "$VERSION >= 7.2" | bc -l) == 1 ]] ; then \
     && apk del -f .phpize-deps \
     ; fi
 
-
 # svm library
 RUN apk add \ 
   libgomp \
@@ -75,10 +68,11 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 ENV COMPOSER_HOME=/.composer \
     LANG=en_US.UTF-8 \
     LANGUAGE=en_US:en \ 
-    LC_ALL=en_US.UTF-8
+    LC_ALL=en_US.UTF-8 \
+    PATH=$PATH:./node_modules/.bin:./vendor/bin
 
-RUN echo Build Version: $VERSION && php -v
-RUN if [[ $(echo "$VERSION <= 7.1" | bc -l) == 1 ]] ; then composer global require phpunit/phpunit 4.8.35 ; \
+RUN echo Build Version: $VERSION && php -v \
+  && if [[ $(echo "$VERSION <= 7.1" | bc -l) == 1 ]] ; then composer global require phpunit/phpunit 4.8.35 ; \
   elif [[ $(echo "$VERSION <= 7.4" | bc -l) == 1 ]] ; then composer global require phpunit/phpunit 6.5.5 ; \
   else composer global require --ignore-platform-req=php \
     phpunit/phpunit 9.5.0 \
