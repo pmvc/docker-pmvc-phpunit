@@ -42,7 +42,7 @@ RUN echo $VERSION \
 RUN if [[ $(echo "$VERSION >= 7.2" | bc -l) == 1 ]] ; then \
     apk add git \
     && apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS \
-    && pecl install xdebug-3.0.4 \
+    && pecl install xdebug-3.1.1 \
     && docker-php-ext-enable xdebug \
     && apk del -f .phpize-deps \
     ; fi

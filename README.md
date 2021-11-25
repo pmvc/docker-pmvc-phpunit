@@ -13,7 +13,7 @@ There are thee major phpunit version.
 ## Features
 * support utc timezone without date_default_timezone_set
 * support phpunit [4.8.36 - 9.5.10]
-* support xdebug for code coverage
+* support xdebug for code coverage [3.1.1]
 * support pmvc command line
 * support pdo-[mysql, pgsql, sqlite]
 
