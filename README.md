@@ -6,9 +6,9 @@ PHP with phpunit and pmvc
 ## phpunit version
 
 There are thee major phpunit version.
-* PHP 5.6 [5.5, 7.0, 7.1] use phpunit 4.8.35
-* PHP 7.2 [7.3, 7.4] use phpunit 6.5.5
-* php 8 use phpunit 9.5.0
+* PHP 5.6 [5.5, 7.0, 7.1] use phpunit 4.8.36
+* PHP 7.2 [7.3, 7.4] use phpunit 6.5.14
+* php 8 use phpunit 9.5.10
 
 ## Features
 * support utc timezone without date_default_timezone_set

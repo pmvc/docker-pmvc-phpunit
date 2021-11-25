@@ -72,10 +72,10 @@ ENV COMPOSER_HOME=/.composer \
     PATH=$PATH:./node_modules/.bin:./vendor/bin
 
 RUN echo Build Version: $VERSION && php -v \
-  && if [[ $(echo "$VERSION <= 7.1" | bc -l) == 1 ]] ; then composer global require phpunit/phpunit 4.8.35 ; \
-  elif [[ $(echo "$VERSION <= 7.4" | bc -l) == 1 ]] ; then composer global require phpunit/phpunit 6.5.5 ; \
+  && if [[ $(echo "$VERSION <= 7.1" | bc -l) == 1 ]] ; then composer global require phpunit/phpunit 4.8.36 ; \
+  elif [[ $(echo "$VERSION <= 7.4" | bc -l) == 1 ]] ; then composer global require phpunit/phpunit 6.5.14 ; \
   else composer global require --ignore-platform-req=php \
-    phpunit/phpunit 9.5.0 \
+    phpunit/phpunit 9.5.10 \
     php-coveralls/php-coveralls \
     && ln -s /.composer/vendor/bin/php-coveralls /usr/local/bin/coveralls \
   ; fi
