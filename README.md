@@ -12,8 +12,10 @@ There are thee major phpunit version.
 
 ## Features
 * support utc timezone without date_default_timezone_set
-* support phpunit
+* support phpunit [4.8.36 - 9.5.10]
+* support xdebug for code coverage
 * support pmvc command line
+* support pdo-[mysql, pgsql, sqlite]
 
 ## GIT
    * https://github.com/pmvc/docker-pmvc-phpunit
@@ -24,5 +26,8 @@ There are thee major phpunit version.
 
 ## Use with CircleCI example
    * https://github.com/pmvc/generator-php-pmvc-plugin/blob/master/generators/app/templates/_circleci/config.yml
+   * Real CircleCI demo
+      * https://app.circleci.com/pipelines/github/pmvc/pmvc
+
 
 MIT 2021
