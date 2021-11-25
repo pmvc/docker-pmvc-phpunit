@@ -24,3 +24,5 @@ There are thee major phpunit version.
 
 ## Use with CircleCI example
    * https://github.com/pmvc/generator-php-pmvc-plugin/blob/master/generators/app/templates/_circleci/config.yml
+
+MIT 2021
