@@ -21,9 +21,8 @@ RUN apk update && apk add \
   && apk add --virtual .build-deps \
   musl-dev \
   autoconf \
-  postgresql-dev
-
-RUN docker-php-ext-install \
+  postgresql-dev \
+  && docker-php-ext-install \
   pcntl \
   sockets \
   pdo_pgsql \
