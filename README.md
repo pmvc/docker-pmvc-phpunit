@@ -24,10 +24,8 @@ There are thee major phpunit version.
    * hillliu/pmvc-phpunit
    * https://hub.docker.com/r/hillliu/pmvc-phpunit
 
-## Use with CircleCI example
-   * https://github.com/pmvc/generator-php-pmvc-plugin/blob/master/generators/app/templates/_circleci/config.yml
-   * Real CircleCI demo
-      * https://app.circleci.com/pipelines/github/pmvc/pmvc
-
+## Use with CircleCI
+   * [CircleCI configure file example](https://github.com/pmvc/generator-php-pmvc-plugin/blob/master/generators/app/templates/_circleci/config.yml)
+   * [Real CircleCI demo](https://app.circleci.com/pipelines/github/pmvc/pmvc)
 
 MIT 2021
