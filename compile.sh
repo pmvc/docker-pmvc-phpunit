@@ -1,16 +1,20 @@
 #!/usr/bin/env bash
 
-DIR="$( cd "$(dirname "$0")" ; pwd -P )"
-sourceImage=`${DIR}/support/sourceImage.sh`
-targetImage=`${DIR}/support/targetImage.sh`
+DIR="$(
+  cd "$(dirname "$0")"
+  pwd -P
+)"
+sourceImage=$(${DIR}/support/sourceImage.sh)
+targetImage=$(${DIR}/support/targetImage.sh)
 archiveFile=$DIR/archive.tar
-VERSION=`${DIR}/support/VERSION.sh`
+VERSION=$(${DIR}/support/VERSION.sh)
+DOCKER_FILE=${DOCKER_FILE:-Dockerfile}
 
-list(){
-  docker images | head -10 
+list() {
+  docker images | head -10
 }
 
-tag(){
+tag() {
   tag=$1
   if [ -z "$tag" ]; then
     if [ -z "$VERSION" ]; then
@@ -26,43 +30,44 @@ tag(){
   echo "* Finish tag -->"
 }
 
-push(){
-  if [ ! -z "$1" ]; then
-    PUSH_VERSION=$1
-  else
-    PUSH_VERSION=$VERSION
-  fi  
+push() {
+  PUSH_VERSION=${1:-$VERSION}
+  LATEST_TAG=${2:-latest}
   if [ -z "$PUSH_VERSION" ]; then
     tag=latest
   else
     tag=$PUSH_VERSION
+    if [ "x$LATEST_TAG" != "xlatest" ]; then
+      tag=$LATEST_TAG-$PUSH_VERSION
+    fi
   fi
-  echo "* <!-- Start to push ${tag}"
+  echo "* <!-- Start to push ${targetImage}:$tag"
   echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_LOGIN" --password-stdin
   docker push ${targetImage}:$tag
   echo "* Finish to push -->"
   if [ ! -z "$1" ]; then
-    if [ "x$VERSION" == "x$tag" ]; then
-        echo "* <!-- Start to auto push latest"
-        docker tag ${targetImage}:$tag ${targetImage}:latest
-        docker push ${targetImage}:latest
-        echo "* Finish to push -->"
+    if [ "x$VERSION" == "x$PUSH_VERSION" ]; then
+      echo "* <!-- Start to auto push ${targetImage}:${LATEST_TAG}"
+      docker tag ${targetImage}:$tag ${targetImage}:${LATEST_TAG}
+      docker push ${targetImage}:${LATEST_TAG}
+      echo "* Finish to push -->"
     fi
   fi
 }
 
-build(){
+build() {
   if [ -z "$1" ]; then
     NO_CACHE=""
-  else  
+  else
     NO_CACHE="--no-cache"
-  fi  
+  fi
   if [ -z "$VERSION" ]; then
     BUILD_ARG=""
   else
     BUILD_ARG="--build-arg VERSION=${VERSION}"
   fi
-  docker build ${BUILD_ARG} ${NO_CACHE} -f ${DIR}/Dockerfile -t $sourceImage ${DIR}
+  echo build: ${DIR}/${DOCKER_FILE}
+  docker build ${BUILD_ARG} ${NO_CACHE} -f ${DIR}/${DOCKER_FILE} -t $sourceImage ${DIR}
   list
 }
 
@@ -84,27 +89,28 @@ case "$1" in
     restore
     ;;
   p)
-    push $2
+    push $2 $3
     ;;
   t)
-    tag $2 
+    tag $2
     ;;
-  nocache)  
+  nocache)
     build --no-cache
     ;;
   auto)
     build
     tag
     ;;
-  b)  
+  b)
     build
     ;;
   l)
     list
     ;;
   *)
-    echo "$0 [save|restore|p|t|nocache|auto|b|l]" 
+    echo "$0 [save|restore|p|t|nocache|auto|b|l]"
     exit
+    ;;
 esac
 
 exit $?

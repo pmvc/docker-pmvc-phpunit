@@ -75,6 +75,7 @@ RUN echo Build Version: $VERSION && php -v \
   elif [[ $(echo "$VERSION <= 7.4" | bc -l) == 1 ]] ; then composer global require phpunit/phpunit 6.5.14 ; \
   else composer global require --ignore-platform-req=php \
     phpunit/phpunit 9.5.10 \
+    symfony/console 5.*.* \
     php-coveralls/php-coveralls \
     && ln -s /.composer/vendor/bin/php-coveralls /usr/local/bin/coveralls \
   ; fi
