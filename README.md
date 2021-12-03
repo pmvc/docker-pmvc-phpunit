@@ -18,6 +18,14 @@ There are thee major phpunit version.
 * support pmvc command line
 * support pdo-[mysql, pgsql, sqlite]
 
+### Advance feature
+* NodeJS command for your frontend project.
+* Machine Learning (Need greater than php7.4)
+   * SVM Library 
+      * https://php-ml.readthedocs.io/en/latest/machine-learning/regression/least-squares/
+   * Rubiml
+      * https://docs.rubixml.com/1.0/index.html
+
 ## GIT
    * https://github.com/pmvc/docker-pmvc-phpunit
 
@@ -26,6 +34,7 @@ There are thee major phpunit version.
    * https://hub.docker.com/r/hillliu/pmvc-phpunit
 
 ## Use with CircleCI
+Build your ci within 3 run command.
    * [CircleCI configure file example](https://github.com/pmvc/generator-php-pmvc-plugin/blob/master/generators/app/templates/_circleci/config.yml)
    * [Real CircleCI demo](https://app.circleci.com/pipelines/github/pmvc/pmvc)
 
