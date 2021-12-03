@@ -20,7 +20,7 @@ There are thee major phpunit version.
 
 ### Advance feature
 * NodeJS command for your frontend project.
-* Machine Learning (Need greater than php7.4)
+* Machine Learning (Need php7.4 or above)
    * SVM Library 
       * https://php-ml.readthedocs.io/en/latest/machine-learning/regression/least-squares/
    * Rubiml
