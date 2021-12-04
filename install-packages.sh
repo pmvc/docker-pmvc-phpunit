@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 PREPARE="bash bc postgresql-libs"
 
