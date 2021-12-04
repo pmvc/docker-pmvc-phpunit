@@ -18,12 +18,11 @@ ENV COMPOSER_HOME=/.composer \
     LANG=en_US.UTF-8 \
     LANGUAGE=en_US:en \ 
     LC_ALL=en_US.UTF-8 \
-    INSTALL_VERSION=$VERSION \
     PATH=$PATH:./node_modules/.bin:./vendor/bin
 
 # apk
 COPY ./install-packages.sh /usr/local/bin/
-RUN install-packages.sh && rm /usr/local/bin/install-packages.sh
+RUN INSTALL_VERSION=$VERSION install-packages.sh && rm /usr/local/bin/install-packages.sh
 
 # nodejs
 COPY ./cacert.pem /usr/local/share/ca-certificates/cacert.pem
