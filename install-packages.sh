@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PREPARE="bash bc postgresql-libs"
+PREPARE="postgresql-libs"
 
 BUILD_DEPS="$PHPIZE_DEPS musl-dev build-base postgresql-dev"
 
@@ -60,7 +60,7 @@ echo ""
 echo $PECL
 echo ""
 
-apk update && apk add --virtual .build-deps $BUILD_DEPS && apk add $PREPARE
+apk add --virtual .build-deps $BUILD_DEPS && apk add $PREPARE
 docker-php-ext-install $PHP_EXT
 pecl install $PECL
 docker-php-ext-enable $PHP_EXT_ENABLE

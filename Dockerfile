@@ -22,7 +22,7 @@ ENV COMPOSER_HOME=/.composer \
 
 # apk
 COPY ./install-packages.sh /usr/local/bin/
-RUN INSTALL_VERSION=$VERSION install-packages.sh && rm /usr/local/bin/install-packages.sh
+RUN apk update && apk add bash bc && INSTALL_VERSION=$VERSION install-packages.sh && rm /usr/local/bin/install-packages.sh
 
 # nodejs
 COPY ./cacert.pem /usr/local/share/ca-certificates/cacert.pem
