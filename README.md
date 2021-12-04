@@ -30,7 +30,7 @@ There are thee major phpunit version.
    * https://github.com/pmvc/docker-pmvc-phpunit
 
 ## Docker hub
-   * hillliu/pmvc-phpunit
+   * Image Name: hillliu/pmvc-phpunit
    * https://hub.docker.com/r/hillliu/pmvc-phpunit
 
 ## Use with CircleCI
