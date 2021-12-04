@@ -39,33 +39,46 @@ else
   PREPARE="$PREPARE npm yarn"
 fi
 
-echo "Will install"
+echo "###"
+echo "# Will install"
+echo "###"
 echo ""
 echo $PREPARE
 echo ""
-echo "Will build package"
+echo "###"
+echo "# Will build package"
+echo "###"
 echo ""
 echo $BUILD_DEPS
 echo ""
-echo "Will install PHP EXT"
+echo "###"
+echo "# Will install PHP EXT"
+echo "###"
 echo ""
 echo $PHP_EXT
-echo ""
-echo "Will enable PHP EXT"
-echo ""
-echo $PHP_EXT_ENABLE
-echo ""
-echo "Will install pecl"
-echo ""
-echo $PECL
 echo ""
 
 apk add --virtual .build-deps $BUILD_DEPS && apk add $PREPARE
 docker-php-ext-install $PHP_EXT
-if [ ! -z "$PECL" ]; then
+
+if [ "x$PECL" != "x" ]; then
+  echo "###"
+  echo "# Will install pecl"
+  echo "###"
+  echo ""
+  echo $PECL
+  echo ""
   pecl install $PECL
 fi
-if [ ! -z "$PHP_EXT_ENABLE" ]; then
+
+if [ "x$PHP_EXT_ENABLE" != "x" ]; then
+  echo "###"
+  echo "# Will enable PHP EXT"
+  echo "###"
+  echo ""
+  echo $PHP_EXT_ENABLE
+  echo ""
   docker-php-ext-enable $PHP_EXT_ENABLE
 fi
+
 apk del -f .build-deps && rm -rf /var/cache/apk/*
