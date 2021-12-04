@@ -13,6 +13,8 @@ do_build() {
   echo "building --- Version: " $VER "-->";
   DEST_FILE=${DEST_FOLDER}/Dockerfile
   cp Dockerfile ${DEST_FILE}
+  cp cacert.pem ${DEST_FOLDER}
+  cp install-packages.sh ${DEST_FOLDER}
   sed -i -e "s|\[VERSION\]|$SED_REPLACE_VER|g" ${DEST_FILE}
   if [ -e "${DEST_FILE}-e" ]; then rm ${DEST_FILE}-e; fi;
 }

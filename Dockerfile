@@ -14,58 +14,20 @@ COPY --from=builder \
     /usr/local/bin/svm-scale \
     /usr/local/bin/
 
-RUN apk update && apk add \
-  bash \
-  bc \
-  postgresql-libs \
-  && apk add --virtual .build-deps \
-  musl-dev \
-  autoconf \
-  postgresql-dev \
-  && docker-php-ext-install \
-  pcntl \
-  sockets \
-  pdo_pgsql \
-  pdo_mysql
-
-# tensor
-# svm librar (libgomp, libstdc++, libgcc)
-RUN if [[ $(echo "$VERSION >= 7.4" | bc -l) == 1 ]] ; then \
-  apk add \
-  libgomp \
-  libstdc++ \
-  libgcc \
-  && apk add --virtual .build-deps \ 
-  lapack-dev \
-  libexecinfo-dev \
-  openblas-dev \
-  ; fi
-
-# xdebug
-# git use in php-coveralls/php-coveralls
-RUN if [[ $(echo "$VERSION >= 7.2" | bc -l) == 1 ]] ; then \
-  apk add \
-  git \
-  && apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS \
-  && pecl install xdebug-3.1.1 \
-  && docker-php-ext-enable xdebug \
-  && apk del -f .phpize-deps \
-  ; fi
-
-# nodejs
-COPY ./cacert.pem /usr/local/share/ca-certificates/cacert.pem
-RUN if [[ $(echo "$VERSION == 7.0" | bc -l) == 1 ]] ; then apk add nodejs yarn; \
-  elif [[ $(echo "$VERSION == 5.5" | bc -l) == 1 ]] ; then apk --no-cache add nodejs ca-certificates && update-ca-certificates; \
-  else apk add nodejs npm yarn; fi
-
-# clean
-RUN apk del -f .build-deps && rm -rf /var/cache/apk/*
-
 ENV COMPOSER_HOME=/.composer \
     LANG=en_US.UTF-8 \
     LANGUAGE=en_US:en \ 
     LC_ALL=en_US.UTF-8 \
+    INSTALL_VERSION=$VERSION \
     PATH=$PATH:./node_modules/.bin:./vendor/bin
+
+# apk
+COPY ./install-packages.sh /usr/local/bin/
+RUN install-packages.sh && rm /usr/local/bin/install-packages.sh
+
+# nodejs
+COPY ./cacert.pem /usr/local/share/ca-certificates/cacert.pem
+RUN if [[ $(echo "$VERSION == 5.5" | bc -l) == 1 ]] ; then update-ca-certificates; fi
 
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php -r "if (hash_file('sha384', 'composer-setup.php') === '906a84df04cea2aa72f40b5f787e49f22d4c2f19492ac310e8cba5b96ac8b64115ac402c8cd292b8a03482574915d1a8') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
