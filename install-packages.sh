@@ -62,6 +62,10 @@ echo ""
 
 apk add --virtual .build-deps $BUILD_DEPS && apk add $PREPARE
 docker-php-ext-install $PHP_EXT
-pecl install $PECL
-docker-php-ext-enable $PHP_EXT_ENABLE
+if [ ! -z "$PECL" ]; then
+  pecl install $PECL
+fi
+if [ ! -z "$PHP_EXT_ENABLE" ]; then
+  docker-php-ext-enable $PHP_EXT_ENABLE
+fi
 apk del -f .build-deps && rm -rf /var/cache/apk/*
