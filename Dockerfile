@@ -22,11 +22,11 @@ ENV COMPOSER_HOME=/.composer \
 
 # apk
 COPY ./install-packages.sh /usr/local/bin/
-RUN apk update && apk add bash bc && INSTALL_VERSION=$VERSION install-packages.sh && rm /usr/local/bin/install-packages.sh
-
-# nodejs
 COPY ./cacert.pem /usr/local/share/ca-certificates/cacert.pem
-RUN if [[ $(echo "$VERSION == 5.5" | bc -l) == 1 ]] ; then update-ca-certificates; fi
+RUN apk update && apk add bash bc \
+  && INSTALL_VERSION=$VERSION install-packages.sh \
+  && rm /usr/local/bin/install-packages.sh; \
+  if [[ $(echo "$VERSION == 5.5" | bc -l) == 1 ]] ; then update-ca-certificates; fi
 
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php -r "if (hash_file('sha384', 'composer-setup.php') === '906a84df04cea2aa72f40b5f787e49f22d4c2f19492ac310e8cba5b96ac8b64115ac402c8cd292b8a03482574915d1a8') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
