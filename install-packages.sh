@@ -10,6 +10,12 @@ PHP_EXT_ENABLE=""
 
 PECL=""
 
+if [[ $(echo "$INSTALL_VERSION >= 8.0" | bc -l) == 1 ]]; then
+  PREPARE="$PREPARE freetype libjpeg-turbo libpng"
+  BUILD_DEPS="$BUILD_DEPS freetype-dev libjpeg-turbo-dev libpng-dev zlib-dev"
+  ENABLE_GD="on"
+fi
+
 if [[ $(echo "$INSTALL_VERSION == 7.4" | bc -l) == 1 ]]; then
   # svm librar (libgomp, libstdc++, libgcc)
   PREPARE="$PREPARE libgomp libstdc++ libgcc"
@@ -60,6 +66,10 @@ echo ""
 
 apk add --virtual .build-deps $BUILD_DEPS && apk add $PREPARE
 docker-php-ext-install $PHP_EXT
+if [ ! -z "$ENABLE_GD" ]; then
+  docker-php-ext-configure gd --with-jpeg --with-freetype
+  docker-php-ext-install -j$(getconf _NPROCESSORS_ONLN) gd
+fi
 
 if [ "x$PECL" != "x" ]; then
   echo "###"
