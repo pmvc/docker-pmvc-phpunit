@@ -2,6 +2,8 @@ PMVC PHPUNIT Docker Image
 ======
 
 [![CircleCI](https://circleci.com/gh/pmvc/docker-pmvc-phpunit/tree/main.svg?style=svg)](https://circleci.com/gh/pmvc/docker-pmvc-phpunit/tree/main)
+[![Docker Pulls](https://img.shields.io/docker/pulls/hillliu/pmvc-phpunit.svg)](https://hub.docker.com/r/hillliu/pmvc-phpunit)
+
 
 ## phpunit version
 
