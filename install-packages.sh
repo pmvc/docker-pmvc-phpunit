@@ -10,7 +10,8 @@ PHP_EXT_ENABLE=""
 
 PECL=""
 
-if [[ $(echo "$INSTALL_VERSION >= 8.0" | bc -l) == 1 ]]; then
+if [ $(echo "$INSTALL_VERSION >= 8.0" | bc -l) == 1 ] \
+  || [ $(echo "$INSTALL_VERSION == 5.6" | bc -l) == 1 ]; then
   PREPARE="$PREPARE freetype libjpeg-turbo libpng"
   BUILD_DEPS="$BUILD_DEPS freetype-dev libjpeg-turbo-dev libpng-dev zlib-dev"
   ENABLE_GD="on"
@@ -67,7 +68,11 @@ echo ""
 apk add --virtual .build-deps $BUILD_DEPS && apk add $PREPARE
 docker-php-ext-install $PHP_EXT
 if [ ! -z "$ENABLE_GD" ]; then
-  docker-php-ext-configure gd --with-jpeg --with-freetype
+  if [[ $(echo "$INSTALL_VERSION >= 8.0" | bc -l) == 1 ]]; then
+    docker-php-ext-configure gd --with-freetype --with-jpeg
+  else
+    docker-php-ext-configure gd --with-freetype-dir=/usr/include --with-jpeg-dir=/usr/include --with-gd
+  fi
   docker-php-ext-install -j$(getconf _NPROCESSORS_ONLN) gd
 fi
 
