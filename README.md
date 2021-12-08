@@ -21,6 +21,7 @@ There are thee major phpunit version.
 * support pdo-[mysql, pgsql, sqlite]
 
 ### Advance feature
+* GD only in [php 8.0, 8.1, 5.6]
 * NodeJS command for your frontend project.
 * Machine Learning (Need php7.4 or above)
    * SVM Library 
