@@ -26,8 +26,9 @@ There are thee major phpunit version.
 * Machine Learning (Need php7.4 or above)
    * SVM Library 
       * https://php-ml.readthedocs.io/en/latest/machine-learning/regression/least-squares/
-   * Rubiml
+   * RubixML
       * https://docs.rubixml.com/1.0/index.html
+   * RubixML tensor (php 8.0)
 
 ## GIT
    * https://github.com/pmvc/docker-pmvc-phpunit
