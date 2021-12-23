@@ -17,15 +17,15 @@ if [ $(echo "$INSTALL_VERSION >= 8.0" | bc -l) == 1 ] \
   ENABLE_GD="on"
 fi
 
-if [[ $(echo "$INSTALL_VERSION == 7.4" | bc -l) == 1 ]]; then
+if [[ $(echo "$INSTALL_VERSION == 8.0" | bc -l) == 1 ]]; then
   # svm librar (libgomp, libstdc++, libgcc)
   PREPARE="$PREPARE libgomp libstdc++ libgcc"
 
   # tensor
-  # PREPARE="$PREPARE lapack libexecinfo openblas"
-  # BUILD_DEPS="$BUILD_DEPS lapack-dev libexecinfo-dev openblas-dev"
-  # PHP_EXT_ENABLE="$PHP_EXT_ENABLE tensor"
-  # PECL="$PECL tensor"
+  PREPARE="$PREPARE lapack libexecinfo openblas"
+  BUILD_DEPS="$BUILD_DEPS lapack-dev libexecinfo-dev openblas-dev"
+  PHP_EXT_ENABLE="$PHP_EXT_ENABLE tensor"
+  PECL="$PECL tensor"
 fi
 
 # xdbug
@@ -65,15 +65,15 @@ echo ""
 echo $PHP_EXT
 echo ""
 
-apk add --virtual .build-deps $BUILD_DEPS && apk add $PREPARE
-docker-php-ext-install $PHP_EXT
+apk add --virtual .build-deps $BUILD_DEPS && apk add $PREPARE && docker-php-ext-install $PHP_EXT
+
 if [ ! -z "$ENABLE_GD" ]; then
   if [[ $(echo "$INSTALL_VERSION >= 8.0" | bc -l) == 1 ]]; then
-    docker-php-ext-configure gd --with-freetype --with-jpeg
+    docker-php-ext-configure gd --with-freetype --with-jpeg || exit 1
   else
-    docker-php-ext-configure gd --with-freetype-dir=/usr/include --with-jpeg-dir=/usr/include --with-gd
+    docker-php-ext-configure gd --with-freetype-dir=/usr/include --with-jpeg-dir=/usr/include --with-gd  || exit 2 
   fi
-  docker-php-ext-install -j$(getconf _NPROCESSORS_ONLN) gd
+  docker-php-ext-install -j$(getconf _NPROCESSORS_ONLN) gd  || exit 3
 fi
 
 if [ "x$PECL" != "x" ]; then
@@ -83,7 +83,7 @@ if [ "x$PECL" != "x" ]; then
   echo ""
   echo $PECL
   echo ""
-  pecl install $PECL
+  pecl install $PECL || exit 4 
 fi
 
 if [ "x$PHP_EXT_ENABLE" != "x" ]; then
@@ -93,7 +93,9 @@ if [ "x$PHP_EXT_ENABLE" != "x" ]; then
   echo ""
   echo $PHP_EXT_ENABLE
   echo ""
-  docker-php-ext-enable $PHP_EXT_ENABLE
+  docker-php-ext-enable $PHP_EXT_ENABLE || exit 5 
 fi
 
-apk del -f .build-deps && rm -rf /var/cache/apk/*
+apk del -f .build-deps && rm -rf /var/cache/apk/*  || exit 6 
+
+exit 0

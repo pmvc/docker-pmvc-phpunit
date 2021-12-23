@@ -8,6 +8,7 @@ sourceImage=$(${DIR}/support/sourceImage.sh)
 targetImage=$(${DIR}/support/targetImage.sh)
 archiveFile=$DIR/archive.tar
 VERSION=$(${DIR}/support/VERSION.sh)
+ALT_VERSION=$(${DIR}/support/ALT_VERSION.sh)
 DOCKER_FILE=${DOCKER_FILE:-Dockerfile}
 
 list() {
@@ -62,10 +63,12 @@ build() {
   else
     NO_CACHE="--no-cache"
   fi
-  if [ -z "$VERSION" ]; then
-    BUILD_ARG=""
-  else
-    BUILD_ARG="--build-arg VERSION=${VERSION}"
+  BUILD_ARG=""
+  if [ ! -z "$VERSION" ]; then
+    BUILD_ARG="$BUILD_ARG --build-arg VERSION=${VERSION}"
+  fi
+  if [ ! -z "$ALT_VERSION" ]; then
+    BUILD_ARG="$BUILD_ARG --build-arg ALT_VERSION=${ALT_VERSION}"
   fi
   echo build: ${DIR}/${DOCKER_FILE}
   if [ -z "$NO_CACHE" ]; then

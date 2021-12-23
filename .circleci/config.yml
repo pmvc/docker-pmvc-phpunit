@@ -29,9 +29,15 @@ jobs:
       - run:
           name: build Docker image
           command: |
-            docker build -f php-<< parameters.docker-tag >>/Dockerfile \
-              -t $IMAGE_NAME:<< parameters.docker-tag >> \
-              ./php-<< parameters.docker-tag >>
+            VERSION=$(support/VERSION.sh)
+            BUILD_VERSION=<< parameters.docker-tag >>
+            BUILD_ARG=""
+            if [ "x$VERSION" == "x$BUILD_VERSION" ]; then
+                BUILD_ARG="--build-arg ALT_VERSION=fpm-alpine3.14"
+            fi
+            docker build ${BUILD_ARG} -f php-${BUILD_VERSION}/Dockerfile \
+              -t $IMAGE_NAME:${BUILD_VERSION} \
+              ./php-${BUILD_VERSION}
       - run:
           name: Publish Docker Image to Docker Hub
           command: |

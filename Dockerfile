@@ -1,10 +1,11 @@
 ARG VERSION=${VERSION:-[VERSION]}
+ARG ALT_VERSION=${ALT_VERSION:-fpm-alpine}
 
 FROM smizy/libsvm AS builder
 
 ARG VERSION
 
-FROM php:${VERSION}-fpm-alpine
+FROM php:${VERSION}-${ALT_VERSION}
 
 ARG VERSION
 
