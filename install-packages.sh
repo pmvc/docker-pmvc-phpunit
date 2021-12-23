@@ -21,7 +21,12 @@ if [[ $(echo "$INSTALL_VERSION == 8.0" | bc -l) == 1 ]]; then
   # svm librar (libgomp, libstdc++, libgcc)
   PREPARE="$PREPARE libgomp libstdc++ libgcc"
 
+  ##
   # tensor
+  # https://github.com/mlocati/docker-php-extension-installer#special-requirements-for-tensor
+  # Not available in alpine3.15 docker images
+  # ALT_VERSION=fpm-alpine3.14 
+  ##
   PREPARE="$PREPARE lapack libexecinfo openblas"
   BUILD_DEPS="$BUILD_DEPS lapack-dev libexecinfo-dev openblas-dev"
   PHP_EXT_ENABLE="$PHP_EXT_ENABLE tensor"
