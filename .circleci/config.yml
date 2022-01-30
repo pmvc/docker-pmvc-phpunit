@@ -12,6 +12,9 @@ jobs:
     parameters:
       docker-tag:
         type: string
+      folder-prefix:
+        type: string
+        default: "php-"
     executor: docker-publisher
     steps:
       - checkout
@@ -25,19 +28,20 @@ jobs:
           name: Gen Docker file
           command: |
             ./build.sh << parameters.docker-tag >>
-            ls -la php-<< parameters.docker-tag >>
+            ls -la << parameters.folder-prefix >><< parameters.docker-tag >>
       - run:
           name: build Docker image
           command: |
             VERSION=$(support/VERSION.sh)
             BUILD_VERSION=<< parameters.docker-tag >>
+            BUILD_FOLDER=<< parameters.folder-prefix >><< parameters.docker-tag >>
             BUILD_ARG=""
             if [ "x$VERSION" == "x$BUILD_VERSION" ]; then
                 BUILD_ARG="--build-arg ALT_VERSION=fpm-alpine3.14"
             fi
-            docker build ${BUILD_ARG} -f php-${BUILD_VERSION}/Dockerfile \
+            docker build ${BUILD_ARG} -f ${BUILD_FOLDER}/Dockerfile \
               -t $IMAGE_NAME:${BUILD_VERSION} \
-              ./php-${BUILD_VERSION}
+              ./${BUILD_FOLDER}
       - run:
           name: Publish Docker Image to Docker Hub
           command: |
