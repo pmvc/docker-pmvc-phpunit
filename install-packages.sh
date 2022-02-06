@@ -74,6 +74,7 @@ apk add --virtual .build-deps $BUILD_DEPS && apk add $PREPARE
 
 ###
 # workaround for php 8.0.15
+# https://github.com/docker-library/php/issues/1245#issuecomment-1020475243
 ###
 CFLAGS="$CFLAGS -D_GNU_SOURCE" docker-php-ext-install $PHP_EXT
 
