@@ -70,7 +70,12 @@ echo ""
 echo $PHP_EXT
 echo ""
 
-apk add --virtual .build-deps $BUILD_DEPS && apk add $PREPARE && docker-php-ext-install $PHP_EXT
+apk add --virtual .build-deps $BUILD_DEPS && apk add $PREPARE
+
+###
+# workaround for php 8.0.15
+###
+CFLAGS="$CFLAGS -D_GNU_SOURCE" docker-php-ext-install $PHP_EXT
 
 if [ ! -z "$ENABLE_GD" ]; then
   if [[ $(echo "$INSTALL_VERSION >= 8.0" | bc -l) == 1 ]]; then
