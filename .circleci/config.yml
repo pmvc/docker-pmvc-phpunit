@@ -2,8 +2,6 @@ version: 2.1
 
 executors:
   docker-publisher:
-    environment:
-      IMAGE_NAME: hillliu/pmvc-phpunit
     docker:
       - image: circleci/buildpack-deps:18.04
 
@@ -12,11 +10,15 @@ jobs:
     parameters:
       docker-tag:
         type: string
+      folder-prefix:
+        type: string
+        default: "php-"
     executor: docker-publisher
     steps:
       - checkout
       - setup_remote_docker:
           version: 20.10.7
+          docker_layer_caching: true
       - run:
           name: Log time
           command: date
@@ -24,34 +26,49 @@ jobs:
           name: Gen Docker file
           command: |
             ./build.sh << parameters.docker-tag >>
-            cp ./cacert.pem ./php-<< parameters.docker-tag >>
-            ls -la php-<< parameters.docker-tag >>
+            ls -la << parameters.folder-prefix >><< parameters.docker-tag >>
       - run:
           name: build Docker image
           command: |
-            docker build -f php-<< parameters.docker-tag >>/Dockerfile \
-              -t $IMAGE_NAME:<< parameters.docker-tag >> \
-              ./php-<< parameters.docker-tag >>
+            VERSION=$(support/VERSION.sh)
+            IMAGE_NAME=$(support/targetImage.sh)
+            BUILD_VERSION=<< parameters.docker-tag >>
+            BUILD_FOLDER=<< parameters.folder-prefix >><< parameters.docker-tag >>
+            BUILD_ARG=""
+            if [ "x$VERSION" == "x$BUILD_VERSION" ]; then
+                BUILD_ARG="--build-arg ALT_VERSION=fpm-alpine3.14"
+            fi
+            docker build ${BUILD_ARG} -f ${BUILD_FOLDER}/Dockerfile \
+              -t $IMAGE_NAME:${BUILD_VERSION} \
+              ./${BUILD_FOLDER}
       - run:
           name: Publish Docker Image to Docker Hub
           command: |
             ./compile.sh p << parameters.docker-tag >>
+  trigger-pmvc:
+    executor: docker-publisher
+    steps:
+      - run:
+          name: Trigger pmvc to test docker image
+          # https://app.circleci.com/settings/user/tokens
+          command: |
+            curl -X POST --url https://circleci.com/api/v2/project/github/pmvc/pmvc/pipeline \
+               --header "Content-Type: application/json" \
+               --header "Circle-Token: $CIRCLE_TOKEN"
 
 workflows:
   run-job:
     jobs:
       - build-and-publish:
           matrix:
-            name: test-<< matrix.docker-tag >>
             parameters:
-              docker-tag: ["8", "7.4", "7.3", "7.2", "7.1", "7.0", "5.6", "5.5"]
+              docker-tag: ["8.1", "8.0", "7.4", "7.3", "7.2", "7.1", "7.0", "5.6", "5.5"]
+      - trigger-pmvc:
+          requires:
+            - build-and-publish
   nightly:
     jobs:
-      - build-and-publish:
-          matrix:
-            name: test-<< matrix.docker-tag >>
-            parameters:
-              docker-tag: ["8", "7.4", "7.3", "7.2", "7.1", "7.0", "5.6", "5.5"]
+      - trigger-pmvc
     triggers:
       - schedule:
           cron: "0 0 1 * *"

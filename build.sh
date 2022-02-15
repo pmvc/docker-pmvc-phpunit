@@ -1,20 +1,21 @@
 #!/usr/bin/env bash
 
-DIR="$( cd "$(dirname "$0")" ; pwd -P )"
+DIR="$(
+  cd "$(dirname "$0")"
+  pwd -P
+)"
 
 do_build() {
-  VER=$1
-  SED_REPLACE_VER=$VER
-  if [ "x$VER" == "xlatest" ]; then
-    SED_REPLACE_VER=8
-  fi
-  DEST_FOLDER=${DIR}/php-$VER
+  SED_REPLACE_VER=$1
+  DEST_FOLDER=${DIR}/php-$SED_REPLACE_VER
   mkdir -p ${DEST_FOLDER}
-  echo "building --- Version: " $VER "-->";
+  echo "building --- Version: " $SED_REPLACE_VER "-->"
   DEST_FILE=${DEST_FOLDER}/Dockerfile
   cp Dockerfile ${DEST_FILE}
+  cp cacert.pem ${DEST_FOLDER}
+  cp install-packages.sh ${DEST_FOLDER}
   sed -i -e "s|\[VERSION\]|$SED_REPLACE_VER|g" ${DEST_FILE}
-  if [ -e "${DEST_FILE}-e" ]; then rm ${DEST_FILE}-e; fi;
+  if [ -e "${DEST_FILE}-e" ]; then rm ${DEST_FILE}-e; fi
 }
 
-do_build $1 
+do_build $1
