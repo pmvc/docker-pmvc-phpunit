@@ -1,6 +1,29 @@
 #!/usr/bin/env bash
 
 MY_PWD=$(pwd)
+CMD=${CMD:-pmvc}
+
+BASE_DIRECTORY=$(echo "$MY_PWD" | cut -d "/" -f2)
+
+MOUNT=${MOUNT-}
+
+EXCLUDE_DIR="bin etc lib proc sbin sys usr var"
+
+if [ -z "$MOUNT" ]; then
+  if [ $(echo "$EXCLUDE_DIR" | grep $BASE_DIRECTORY | wc -l) -gt 0 ]; then 
+    echo -n "
+    You are not setting MOUNT environment. such as
+    MOUNT=xxx pmvc ...
+
+    And your base folder (${BASE_DIRECTORY}) is under \"${EXCLUDE_DIR}\"
+    MOUNT will auto use current folder,
+    and possible could not search vendor/autoload.php
+"
+    MOUNT=$MY_PWD
+  else
+    MOUNT="/${BASE_DIRECTORY}"
+  fi
+fi
 
 C=''
 for i in "$@"; do 
@@ -13,6 +36,8 @@ pid=$$
 cli='env docker run --rm';
 cli+=" --env-file <(env)";
 cli+=" -v $MY_PWD:$MY_PWD";
+cli+=" -v $MOUNT:$MOUNT";
+cli+=" -v /etc/passwd:/etc/passwd";
 cli+=" -w $MY_PWD";
 cli+=" -u $(id -u):$(id -g)";
 cli+=" --name phpunit-${pid} hillliu/pmvc-phpunit"
