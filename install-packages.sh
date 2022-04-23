@@ -12,8 +12,8 @@ PECL=""
 
 if [ $(echo "$INSTALL_VERSION >= 8.0" | bc -l) == 1 ] \
   || [ $(echo "$INSTALL_VERSION == 5.6" | bc -l) == 1 ]; then
-  PREPARE="$PREPARE freetype libjpeg-turbo libpng"
-  BUILD_DEPS="$BUILD_DEPS freetype-dev libjpeg-turbo-dev libpng-dev zlib-dev"
+  PREPARE="$PREPARE freetype libjpeg-turbo libpng libwebp libvpx"
+  BUILD_DEPS="$BUILD_DEPS freetype-dev libjpeg-turbo-dev libpng-dev libwebp-dev zlib-dev libvpx-dev"
   ENABLE_GD="on"
 fi
 
@@ -80,9 +80,9 @@ CFLAGS="$CFLAGS -D_GNU_SOURCE" docker-php-ext-install $PHP_EXT
 
 if [ ! -z "$ENABLE_GD" ]; then
   if [[ $(echo "$INSTALL_VERSION >= 8.0" | bc -l) == 1 ]]; then
-    docker-php-ext-configure gd --with-freetype --with-jpeg || exit 1
+    docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp || exit 1
   else
-    docker-php-ext-configure gd --with-freetype-dir=/usr/include --with-jpeg-dir=/usr/include --with-gd || exit 2
+    docker-php-ext-configure gd --with-freetype-dir=/usr/include --with-jpeg-dir=/usr/include --with-vpx-dir=/usr/include --with-gd || exit 2
   fi
   docker-php-ext-install -j$(getconf _NPROCESSORS_ONLN) gd || exit 3
 fi
