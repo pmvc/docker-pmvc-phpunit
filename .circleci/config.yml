@@ -11,9 +11,6 @@ jobs:
     parameters:
       docker-tag:
         type: string
-      folder-prefix:
-        type: string
-        default: "php-"
     executor: docker-publisher
     steps:
       - checkout
@@ -26,15 +23,22 @@ jobs:
       - run:
           name: Gen Docker file
           command: |
+            FOLDER_PREFIX=$(support/FOLDER_PREFIX.sh)
+            FOLDER=${FOLDER_PREFIX}<< parameters.docker-tag >>
             ./build.sh << parameters.docker-tag >>
-            ls -la << parameters.folder-prefix >><< parameters.docker-tag >>
+            ls -la ${FOLDER}
+            echo "###"
+            echo "# --- Dockerfile Content ---"
+            echo "###"
+            cat ${FOLDER}/Dockerfile
       - run:
           name: build Docker image
           command: |
             VERSION=$(support/VERSION.sh)
+            FOLDER_PREFIX=$(support/FOLDER_PREFIX.sh)
             IMAGE_NAME=$(support/targetImage.sh)
             BUILD_VERSION=<< parameters.docker-tag >>
-            BUILD_FOLDER=<< parameters.folder-prefix >><< parameters.docker-tag >>
+            BUILD_FOLDER=${FOLDER_PREFIX}<< parameters.docker-tag >>
             BUILD_ARG=""
             if [ "x$VERSION" == "x$BUILD_VERSION" ]; then
                 BUILD_ARG="--build-arg ALT_VERSION=fpm-alpine3.14"
