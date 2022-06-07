@@ -33,6 +33,8 @@ There are thee major phpunit version.
 
 ## GIT
    * https://github.com/pmvc/docker-pmvc-phpunit
+### Inspire
+   * https://github.com/torchello/rubix-ml-server-docker
 
 ## Docker hub
    * Image Name: hillliu/pmvc-phpunit
@@ -43,4 +45,4 @@ Build your ci within 3 run command.
    * [CircleCI configure file example](https://github.com/pmvc/generator-php-pmvc-plugin/blob/master/generators/app/templates/_circleci/config.yml)
    * [Real CircleCI demo](https://app.circleci.com/pipelines/github/pmvc/pmvc)
 
-MIT 2021
+MIT 2022
