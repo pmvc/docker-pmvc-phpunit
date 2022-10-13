@@ -39,6 +39,10 @@ There are thee major phpunit version.
 ## Docker hub
    * Image Name: hillliu/pmvc-phpunit
    * https://hub.docker.com/r/hillliu/pmvc-phpunit
+### Check entrypoint
+```
+docker run --rm hillliu/pmvc-phpunit cat /usr/local/bin/docker-php-entrypoint
+```
 
 ## Use with CircleCI
 Build your ci within 3 run command.
