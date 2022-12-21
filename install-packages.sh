@@ -2,7 +2,7 @@
 
 PREPARE="postgresql-libs"
 
-BUILD_DEPS="$PHPIZE_DEPS musl-dev build-base postgresql-dev"
+BUILD_DEPS="$PHPIZE_DEPS musl-dev build-base postgresql-dev linux-headers"
 
 PHP_EXT="pcntl sockets pdo_pgsql pdo_mysql"
 
@@ -37,7 +37,11 @@ fi
 if [[ $(echo "$INSTALL_VERSION >= 7.2" | bc -l) == 1 ]]; then
   # git use in php-coveralls/php-coveralls
   PREPARE="$PREPARE git"
-  PECL="$PECL xdebug-3.1.1"
+  if [[ $(echo "$INSTALL_VERSION >= 8.1" | bc -l) == 1 ]]; then
+    PECL="$PECL xdebug-3.2.0"
+  else
+    PECL="$PECL xdebug-3.1.6"
+  fi
   PHP_EXT_ENABLE="$PHP_EXT_ENABLE xdebug"
 fi
 
