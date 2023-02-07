@@ -33,7 +33,7 @@ done
 
 pid=$$
 
-cli='env docker run --rm';
+cli='env docker run --rm --platform linux/amd64';
 cli+=" --env-file <(env)";
 cli+=" -v $MY_PWD:$MY_PWD";
 cli+=" -v $MOUNT:$MOUNT";

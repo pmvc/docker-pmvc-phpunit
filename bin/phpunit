@@ -12,7 +12,7 @@ done
 
 pid=$$
 
-cli='env docker run --rm';
+cli='env docker run --rm --platform linux/amd64';
 if [ "xbash" == "x$CMD" ]; then
   cli+=" -it";
 fi
