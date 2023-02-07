@@ -12,6 +12,7 @@ COPY --from=builder \
     /usr/local/bin/svm-predict \
     /usr/local/bin/svm-scale \
     /usr/local/bin/
+COPY ./docker/cacert.pem /usr/local/share/ca-certificates/cacert.pem
 
 ENV COMPOSER_HOME=/.composer \
     LANG=en_US.UTF-8 \
@@ -20,12 +21,10 @@ ENV COMPOSER_HOME=/.composer \
     PATH=$PATH:./node_modules/.bin:./vendor/bin
 
 # apk
-COPY ./install-packages.sh /usr/local/bin/
-COPY ./cacert.pem /usr/local/share/ca-certificates/cacert.pem
+COPY ./install-packages.sh /usr/local/bin/install-packages
 RUN apk update && apk add bash bc \
-  && INSTALL_VERSION=$VERSION install-packages.sh \
-  && rm /usr/local/bin/install-packages.sh; \
-  if [[ $(echo "$VERSION == 5.5" | bc -l) == 1 ]] ; then update-ca-certificates; fi
+  && INSTALL_VERSION=$VERSION install-packages \
+  && rm /usr/local/bin/install-packages;
 
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php -r "if (hash_file('sha384', 'composer-setup.php') === file_get_contents('https://raw.githubusercontent.com/composer/composer.github.io/main/installer.sig')) { echo 'Installer verified'; } else { fwrite(STDERR, 'Verify composer signature failed.'); unlink('composer-setup.php'); } echo PHP_EOL;" \
@@ -52,3 +51,7 @@ RUN printf '[PHP]\ndate.timezone = "UTC"\n' > /usr/local/etc/php/conf.d/tzone.in
 
 VOLUME ["/.composer"]
 WORKDIR /var/www/html
+
+COPY ./docker/entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["server"]

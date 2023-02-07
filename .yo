@@ -1,0 +1,4 @@
+repositoryName=docker-pmvc-phpunit
+repositoryOrgName=pmvc
+dockerImageName=pmvc-phpunit
+dockerOrgName=hillliu

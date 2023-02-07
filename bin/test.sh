@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+DIR="$(
+  cd "$(dirname "$0")"
+  pwd -P
+)"
+
+TERRATEST=$(${DIR}/../support/TERRATEST.sh)
+
+docker run --rm --platform linux/amd64 -v $DIR/../:/app/test \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -w /app/test \
+  $TERRATEST \
+  go test -timeout 30m -v ./tests
+
+

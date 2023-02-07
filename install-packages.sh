@@ -1,8 +1,12 @@
-#!/bin/bash
+#!/usr/bin/env sh
 
-PREPARE="postgresql-libs"
+###
+# Environment ${INSTALL_VERSION} pass from Dockerfile
+###
 
 BUILD_DEPS="$PHPIZE_DEPS musl-dev build-base postgresql-dev linux-headers"
+
+INSTALL="postgresql-libs"
 
 PHP_EXT="pcntl sockets pdo_pgsql pdo_mysql"
 
@@ -12,14 +16,14 @@ PECL=""
 
 if [ $(echo "$INSTALL_VERSION >= 8.0" | bc -l) == 1 ] \
   || [ $(echo "$INSTALL_VERSION == 5.6" | bc -l) == 1 ]; then
-  PREPARE="$PREPARE freetype libjpeg-turbo libpng libwebp libvpx"
   BUILD_DEPS="$BUILD_DEPS freetype-dev libjpeg-turbo-dev libpng-dev libwebp-dev zlib-dev libvpx-dev"
+  INSTALL="$INSTALL freetype libjpeg-turbo libpng libwebp libvpx"
   ENABLE_GD="on"
 fi
 
 if [[ $(echo "$INSTALL_VERSION == 8.0" | bc -l) == 1 ]]; then
   # svm librar (libgomp, libstdc++, libgcc)
-  PREPARE="$PREPARE libgomp libstdc++ libgcc"
+  INSTALL="$INSTALL libgomp libstdc++ libgcc"
 
   ##
   # tensor
@@ -27,8 +31,8 @@ if [[ $(echo "$INSTALL_VERSION == 8.0" | bc -l) == 1 ]]; then
   # Not available in alpine3.15 docker images
   # ALT_VERSION=fpm-alpine3.14
   ##
-  PREPARE="$PREPARE lapack libexecinfo openblas"
   BUILD_DEPS="$BUILD_DEPS lapack-dev libexecinfo-dev openblas-dev"
+  INSTALL="$INSTALL lapack libexecinfo openblas"
   PHP_EXT_ENABLE="$PHP_EXT_ENABLE tensor"
   PECL="$PECL tensor"
 fi
@@ -36,7 +40,7 @@ fi
 # xdbug
 if [[ $(echo "$INSTALL_VERSION >= 7.2" | bc -l) == 1 ]]; then
   # git use in php-coveralls/php-coveralls
-  PREPARE="$PREPARE git"
+  INSTALL="$INSTALL git"
   if [[ $(echo "$INSTALL_VERSION >= 8.1" | bc -l) == 1 ]]; then
     PECL="$PECL xdebug-3.2.0"
   else
@@ -46,35 +50,31 @@ if [[ $(echo "$INSTALL_VERSION >= 7.2" | bc -l) == 1 ]]; then
 fi
 
 # nodejs
-PREPARE="$PREPARE nodejs"
+INSTALL="$INSTALL nodejs"
 if [[ $(echo "$INSTALL_VERSION == 7.0" | bc -l) == 1 ]]; then
-  PREPARE="$PREPARE yarn"
+  INSTALL="$INSTALL yarn"
 elif [[ $(echo "$INSTALL_VERSION == 5.5" | bc -l) == 1 ]]; then
-  PREPARE="$PREPARE ca-certificates"
+  INSTALL="$INSTALL ca-certificates"
 else
-  PREPARE="$PREPARE npm yarn"
+  INSTALL="$INSTALL npm yarn"
 fi
 
 echo "###"
-echo "# Will install"
-echo "###"
-echo ""
-echo $PREPARE
-echo ""
-echo "###"
-echo "# Will build package"
+echo "# Will install build tool"
 echo "###"
 echo ""
 echo $BUILD_DEPS
 echo ""
 echo "###"
-echo "# Will install PHP EXT"
+echo "# Will install"
 echo "###"
 echo ""
-echo $PHP_EXT
+echo $INSTALL
 echo ""
 
-apk add --virtual .build-deps $BUILD_DEPS && apk add $PREPARE
+apk add --virtual .build-deps $BUILD_DEPS && apk add $INSTALL
+
+#/* put your install code here */#
 
 ###
 # workaround for php 8.0.15
@@ -84,7 +84,7 @@ CFLAGS="$CFLAGS -D_GNU_SOURCE" docker-php-ext-install $PHP_EXT
 
 if [ ! -z "$ENABLE_GD" ]; then
   if [[ $(echo "$INSTALL_VERSION >= 8.0" | bc -l) == 1 ]]; then
-    docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp || exit 1
+    docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp || exit 6
   else
     docker-php-ext-configure gd --with-freetype-dir=/usr/include --with-jpeg-dir=/usr/include --with-vpx-dir=/usr/include --with-gd || exit 2
   fi
@@ -111,6 +111,8 @@ if [ "x$PHP_EXT_ENABLE" != "x" ]; then
   docker-php-ext-enable $PHP_EXT_ENABLE || exit 5
 fi
 
-apk del -f .build-deps && rm -rf /var/cache/apk/* || exit 6
+if [[ $(echo "$INSTALL_VERSION == 5.5" | bc -l) == 1 ]]; then update-ca-certificates; fi
+
+apk del -f .build-deps && rm -rf /var/cache/apk/* || exit 1
 
 exit 0
