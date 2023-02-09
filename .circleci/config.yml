@@ -75,7 +75,12 @@ jobs:
     steps:
       - run:
           name: Trigger pmvc to test docker image
+          ##
+          # 1. Create Token
           # https://app.circleci.com/settings/user/tokens
+          # 2. Add Environment CIRCLE_TOKEN
+          # https://app.circleci.com/settings/project/github/pmvc/docker-pmvc-phpunit/environment-variables
+          ##
           command: |
             curl -X POST --url https://circleci.com/api/v2/project/github/pmvc/pmvc/pipeline \
                --header "Content-Type: application/json" \
