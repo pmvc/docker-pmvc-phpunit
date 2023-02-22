@@ -11,6 +11,8 @@ There are thee major phpunit version.
 * PHP 5.5 [5.6, 7.0, 7.1] use phpunit 4.8.36
 * PHP 7.2 [7.3, 7.4] use phpunit 6.5.14
 * php 8.0 [8.1] use phpunit 9.5.10
+* phpunit support version
+   * https://phpunit.de/supported-versions.html
 
 ## Features
 * support utc timezone without date_default_timezone_set
