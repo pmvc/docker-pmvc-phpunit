@@ -34,12 +34,13 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 
 RUN if [[ $(echo "$VERSION <= 7.1" | bc -l) == 1 ]] ; then composer global require phpunit/phpunit 4.8.36 ; \
   elif [[ $(echo "$VERSION <= 7.4" | bc -l) == 1 ]] ; then composer global require phpunit/phpunit 6.5.14 ; \
+  elif [[ $(echo "$VERSION <= 8.0" | bc -l) == 1 ]] ; then composer global require phpunit/phpunit 9.6.3 ; \
   else composer global require \
     phpunit/phpunit 10.0.11 \
     php-coveralls/php-coveralls \
     && ln -s /.composer/vendor/bin/php-coveralls /usr/local/bin/coveralls \
-  ; fi; \
-  composer global require pmvc/pmvc-cli:^0.5.5 \
+  ; fi \
+  && composer global require pmvc/pmvc-cli:^0.5.5 \
   && chmod 0777 /.composer \
   && chmod 0777 -R /.composer/cache \
   && ln -s /.composer/vendor/bin/pmvc /usr/local/bin/ \
