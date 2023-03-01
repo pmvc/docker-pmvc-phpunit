@@ -65,4 +65,4 @@ Build your ci within 3 run command.
 -   [CircleCI configure file example](https://github.com/pmvc/generator-php-pmvc-plugin/blob/master/generators/app/templates/_circleci/config.yml)
 -   [Real CircleCI demo](https://app.circleci.com/pipelines/github/pmvc/pmvc)
 
-MIT 2022
+MIT 2023
