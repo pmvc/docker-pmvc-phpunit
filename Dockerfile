@@ -3,7 +3,7 @@ ARG ALT_VERSION=${ALT_VERSION:-fpm-alpine}
 
 FROM smizy/libsvm AS builder
 
-FROM --platform=linux/amd64 php:${VERSION}-${ALT_VERSION}
+FROM php:${VERSION}-${ALT_VERSION}
 
 ARG VERSION
 
