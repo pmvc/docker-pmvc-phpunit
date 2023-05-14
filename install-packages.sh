@@ -72,7 +72,7 @@ echo ""
 echo $INSTALL
 echo ""
 
-apk add --virtual .build-deps $BUILD_DEPS && apk add $INSTALL
+apk add --virtual .build-deps $BUILD_DEPS && apk add $INSTALL || exit 7
 
 #/* put your install code here */#
 
@@ -86,9 +86,9 @@ if [ ! -z "$ENABLE_GD" ]; then
   if [[ $(echo "$INSTALL_VERSION >= 8.0" | bc -l) == 1 ]]; then
     docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp || exit 6
   else
-    docker-php-ext-configure gd --with-freetype-dir=/usr/include --with-jpeg-dir=/usr/include --with-vpx-dir=/usr/include --with-gd || exit 2
+    docker-php-ext-configure gd --with-freetype-dir=/usr/include --with-jpeg-dir=/usr/include --with-vpx-dir=/usr/include --with-gd || exit 5
   fi
-  docker-php-ext-install -j$(getconf _NPROCESSORS_ONLN) gd || exit 3
+  docker-php-ext-install -j$(getconf _NPROCESSORS_ONLN) gd || exit 4
 fi
 
 if [ "x$PECL" != "x" ]; then
@@ -98,7 +98,7 @@ if [ "x$PECL" != "x" ]; then
   echo ""
   echo $PECL
   echo ""
-  pecl install $PECL || exit 4
+  pecl install $PECL || exit 3
 fi
 
 if [ "x$PHP_EXT_ENABLE" != "x" ]; then
@@ -108,7 +108,7 @@ if [ "x$PHP_EXT_ENABLE" != "x" ]; then
   echo ""
   echo $PHP_EXT_ENABLE
   echo ""
-  docker-php-ext-enable $PHP_EXT_ENABLE || exit 5
+  docker-php-ext-enable $PHP_EXT_ENABLE || exit 2
 fi
 
 if [[ $(echo "$INSTALL_VERSION == 5.5" | bc -l) == 1 ]]; then update-ca-certificates; fi
