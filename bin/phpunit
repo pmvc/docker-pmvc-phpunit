@@ -12,14 +12,14 @@ done
 
 pid=$$
 
-cli='env docker run --rm --platform linux/amd64';
+cli='env docker run --rm';
 if [ "xbash" == "x$CMD" ]; then
   cli+=" -it";
 fi
 cli+=" -v $MY_PWD:$MY_PWD";
 cli+=" -w $MY_PWD";
 cli+=" -u $(id -u):$(id -g)";
-cli+=" --name phpunit-${pid} hillliu/pmvc-phpunit:${VERSION}"
+cli+=" --name phpunit-${pid} allfunc/pmvc-phpunit:${VERSION}"
 cli+=" $CMD ${C}"
 
 bash -c "$cli";

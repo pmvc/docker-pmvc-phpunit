@@ -41,7 +41,7 @@ cli+=" -v $MY_PWD:$MY_PWD";
 cli+=" -v $MOUNT:$MOUNT";
 cli+=" -w $MY_PWD";
 cli+=" -u $(id -u):$(id -g)";
-cli+=" --name phpunit-${pid} hillliu/pmvc-phpunit"
+cli+=" --name phpunit-${pid} allfunc/pmvc-phpunit"
 cli+=" $CMD ${C}"
 
 bash -c "$cli";
