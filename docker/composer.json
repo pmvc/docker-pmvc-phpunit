@@ -1,0 +1,9 @@
+{
+    "require": {
+        "pmvc/pmvc": "*",
+        "pmvc-plugin/dispatcher": "*",
+        "pmvc-plugin/default_forward": "*",
+        "pmvc-plugin/cli": "*",
+        "pmvc-plugin/debug": "*"
+    }
+}

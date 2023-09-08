@@ -13,6 +13,7 @@ COPY --from=builder \
     /usr/local/bin/svm-scale \
     /usr/local/bin/
 COPY ./docker/cacert.pem /usr/local/share/ca-certificates/cacert.pem
+COPY ./docker/composer.json /
 
 ENV COMPOSER_HOME=/.composer \
     LANG=en_US.UTF-8 \
@@ -40,7 +41,8 @@ RUN if [[ $(echo "$VERSION <= 7.1" | bc -l) == 1 ]] ; then composer global requi
     php-coveralls/php-coveralls \
     && ln -s /.composer/vendor/bin/php-coveralls /usr/local/bin/coveralls \
   ; fi \
-  && composer global require pmvc/pmvc-cli:^0.6.1 \
+  && composer global require pmvc/pmvc-cli:^0.6.2 \
+  && cd / && composer update \
   && chmod 0777 /.composer \
   && chmod 0777 -R /.composer/cache \
   && ln -s /.composer/vendor/bin/pmvc /usr/local/bin/ \
