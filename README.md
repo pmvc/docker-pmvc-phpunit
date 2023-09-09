@@ -1,7 +1,9 @@
-# PMVC PHPUNIT Docker Image
-
 [![CircleCI](https://circleci.com/gh/pmvc/docker-pmvc-phpunit/tree/main.svg?style=svg)](https://circleci.com/gh/pmvc/docker-pmvc-phpunit/tree/main)
 [![Docker Pulls](https://img.shields.io/docker/pulls/allfunc/pmvc-phpunit.svg)](https://hub.docker.com/r/allfunc/pmvc-phpunit)
+
+# PMVC PHPUNIT Docker Image
+
+-   The latest locked version is PHP 8.1, but you can use PHP 8.2 by specifying tag.
 
 ## phpunit version
 
