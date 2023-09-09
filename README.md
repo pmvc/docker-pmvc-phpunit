@@ -41,10 +41,6 @@ There are thee major phpunit version.
 
 -   https://github.com/pmvc/docker-pmvc-phpunit
 
-### Inspire
-
--   https://github.com/torchello/rubix-ml-server-docker
-
 ## Docker hub
 
 -   Image Name: allfunc/pmvc-phpunit

@@ -10,7 +10,7 @@ done
 
 pid=$$
 
-cli='env docker run --rm --platform linux/amd64';
+cli='env docker run --rm';
 cli+=" -v $MY_PWD:$MY_PWD";
 cli+=" -v $HOME/.composer:/.composer";
 cli+=" -w $MY_PWD";
