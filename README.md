@@ -3,7 +3,7 @@
 
 # PMVC PHPUNIT Docker Image
 
--   The latest locked version is PHP 8.1, but you can use PHP 8.2 by specifying tag.
+-   The latest locked version is `PHP 8.1`, but you can use `PHP 8.2` by specifying tag.
 
 ## phpunit version
 
