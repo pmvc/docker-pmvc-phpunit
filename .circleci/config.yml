@@ -83,10 +83,12 @@ jobs:
             BUILD_FOLDER=${VER_PREFIX}-<< parameters.docker-tag >>
             BUILD_ARG=""
             LATEST_TAG=""
-            if [ "x$VERSION" == "x$BUILD_VERSION" ]; then
+            if [ "x8.0" == "x$BUILD_VERSION" ]; then
                 if [ -n "${ALT_VERSION}" ]; then
                   BUILD_ARG="--build-arg ALT_VERSION=${ALT_VERSION}"
                 fi
+            fi
+            if [ "x$VERSION" == "x$BUILD_VERSION" ]; then
                 LATEST_TAG="-t $IMAGE_NAME:latest"
             fi
             echo "Build ARGS: ${BUILD_ARG}" 
