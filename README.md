@@ -9,7 +9,7 @@
 
 There are thee major phpunit version.
 
--   PHP 5.5 [5.6, 7.0, 7.1] use phpunit 4.8.36
+-   PHP 5.6 [7.0, 7.1] use phpunit 4.8.36
 -   PHP 7.2 [7.3, 7.4] use phpunit 6.5.14
 -   php 8.0 use phpunit 9.6.11
 -   php 8.1 [8.2] use phpunit 10.3.3 
