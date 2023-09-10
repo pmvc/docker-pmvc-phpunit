@@ -3,6 +3,9 @@ version: 2.1
 commands:
   install-docker-buildx:
     description: Install Docker Buildx
+    parameters:
+      docker-tag:
+        type: string
     steps:
       - run:
           name: Install Docker Buildx
@@ -14,7 +17,7 @@ commands:
             sudo apt-get update && sudo apt-get install -y binfmt-support qemu-user-static
             docker run --rm --privileged tonistiigi/binfmt --install arm64
             docker context create buildcontext
-            docker buildx create --name joyful --append buildcontext --use
+            docker buildx create --name joyful-<< parameters.docker-tag >>- --append buildcontext --use
 
 executors:
   docker-publisher:
@@ -68,10 +71,8 @@ jobs:
               cat ${BUILD_FOLDER}/$file
               echo ""
             done
-      - install-docker-buildx
-      - run:
-          name: login
-          command: ./compile.sh login
+      - install-docker-buildx:
+          docker-tag: << parameters.docker-tag >>
       - run:
           name: build Docker image
           command: |
@@ -81,20 +82,32 @@ jobs:
             IMAGE_NAME=$(DOCKER_HUB=1 support/remoteImage.sh)
             BUILD_VERSION=<< parameters.docker-tag >>
             BUILD_FOLDER=${VER_PREFIX}-<< parameters.docker-tag >>
-            BUILD_ARG=""
+            BUILD_ARG="--build-arg BUILDKIT_INLINE_CACHE=1"
             LATEST_TAG=""
             if [ "x8.0" == "x$BUILD_VERSION" ]; then
                 if [ -n "${ALT_VERSION}" ]; then
                   BUILD_ARG="--build-arg ALT_VERSION=${ALT_VERSION}"
+                  docker pull php:${BUILD_VERSION}-${ALT_VERSION:-fpm-alpine}
+                else
+                  docker pull php:${BUILD_VERSION}-fpm-alpine
                 fi
+            else
+              docker pull php:${BUILD_VERSION}-fpm-alpine
             fi
             if [ "x$VERSION" == "x$BUILD_VERSION" ]; then
                 LATEST_TAG="-t $IMAGE_NAME:latest"
             fi
-            echo "Build ARGS: ${BUILD_ARG}" 
+            docker pull $IMAGE_NAME:${BUILD_VERSION}
+            docker pull smizy/libsvm 
             docker buildx inspect --bootstrap
-            docker buildx build ${BUILD_ARG} -f ${BUILD_FOLDER}/Dockerfile \
+            echo "Build ARGS: ${BUILD_ARG}" 
+            echo "# ------ Start to Login ------ #"
+            ./compile.sh login
+            DOCKER_BUILDKIT=1 docker buildx build ${BUILD_ARG} -f ${BUILD_FOLDER}/Dockerfile \
+              --cache-to=type=inline,mode=all \
+              --cache-from $IMAGE_NAME:${BUILD_VERSION} \
               --push \
+              --progress=plain \
               --platform linux/amd64,linux/arm64/v8 \
               -t $IMAGE_NAME:${BUILD_VERSION} ${LATEST_TAG} \
               ./${BUILD_FOLDER}
