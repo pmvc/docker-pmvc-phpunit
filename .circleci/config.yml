@@ -14,7 +14,7 @@ commands:
             sudo apt-get update && sudo apt-get install -y binfmt-support qemu-user-static
             docker run --rm --privileged tonistiigi/binfmt --install arm64
             docker context create buildcontext
-            docker buildx create buildcontext --use
+            docker buildx create --name joyful --append buildcontext --use
 
 executors:
   docker-publisher:
