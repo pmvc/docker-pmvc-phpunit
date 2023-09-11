@@ -55,6 +55,9 @@ jobs:
           name: Log time
           command: date
       - run:
+          name: Get Rate Limit
+          command: ./compile.sh rate
+      - run:
           name: Gen Docker file
           command: |
             VER_PREFIX=$(support/VER_PREFIX.sh)
