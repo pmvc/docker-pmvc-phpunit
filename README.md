@@ -27,14 +27,14 @@ There are thee major phpunit version.
 
 ### Advance feature
 
--   GD only in [php 8.0, 8.1, 5.6]
+-   GD only in [php 5.6 and 8.0 later]
 -   NodeJS command for your frontend project.
--   Machine Learning (Need php7.4 or above)
+-   Machine Learning (Need php7.4 later)
     -   SVM Library
         -   https://php-ml.readthedocs.io/en/latest/machine-learning/regression/least-squares/
     -   RubixML
         -   https://docs.rubixml.com/1.0/index.html
-    -   RubixML tensor (php 8.0 / alpine3.14)
+    -   RubixML tensor (Only in php 8.0 and alpine3.14)
         -   https://github.com/mlocati/docker-php-extension-installer#special-requirements-for-tensor
 
 ## GIT
