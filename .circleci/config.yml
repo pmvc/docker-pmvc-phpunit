@@ -6,18 +6,25 @@ commands:
     parameters:
       docker-tag:
         type: string
+      buildx-version:
+        type: string
+        default: v0.12.1
     steps:
+      - run:
+          name: Install package
+          command: sudo apt-get update && sudo apt-get install -qq -y --no-install-recommends binfmt-support qemu-user-static
+      - run:
+          name: Init VM
+          command: |
+            docker context create CIContext
+            docker run --rm --privileged tonistiigi/binfmt --install arm64
       - run:
           name: Install Docker Buildx
           command: |
             mkdir -vp ~/.docker/cli-plugins/
-            curl --silent -L "https://github.com/docker/buildx/releases/download/v0.10.4/buildx-v0.10.4.linux-amd64" > ~/.docker/cli-plugins/docker-buildx
+            curl --silent -L "https://github.com/docker/buildx/releases/download/<< parameters.buildx-version >>/buildx-<< parameters.buildx-version >>.linux-arm64" > ~/.docker/cli-plugins/docker-buildx
             chmod a+x ~/.docker/cli-plugins/docker-buildx
-            docker buildx version
-            sudo apt-get update && sudo apt-get install -y binfmt-support qemu-user-static
-            docker run --rm --privileged tonistiigi/binfmt --install arm64
-            docker context create buildcontext
-            docker buildx create --name joyful-<< parameters.docker-tag >>- --append buildcontext --use
+            docker buildx create --name joyful-<< parameters.docker-tag >>- --append CIContext --use
 
 executors:
   docker-publisher:
@@ -87,7 +94,7 @@ jobs:
             BUILD_FOLDER=${VER_PREFIX}-<< parameters.docker-tag >>
             BUILD_ARG="--build-arg BUILDKIT_INLINE_CACHE=1"
             LATEST_TAG=""
-            if [ "x8.0" == "x$BUILD_VERSION" ]; then
+            if [ "x8.2" == "x$BUILD_VERSION" ]; then
                 if [ -n "${ALT_VERSION}" ]; then
                   BUILD_ARG="--build-arg ALT_VERSION=${ALT_VERSION}"
                   docker pull php:${BUILD_VERSION}-${ALT_VERSION:-fpm-alpine}
@@ -100,7 +107,7 @@ jobs:
             if [ "x$VERSION" == "x$BUILD_VERSION" ]; then
                 LATEST_TAG="-t $IMAGE_NAME:latest"
             fi
-            docker pull $IMAGE_NAME:${BUILD_VERSION}
+            docker pull $IMAGE_NAME:${BUILD_VERSION} || true
             docker pull smizy/libsvm 
             docker buildx inspect --bootstrap
             echo "Build ARGS: ${BUILD_ARG}" 
@@ -143,8 +150,18 @@ workflows:
             - test
           matrix:
             parameters:
-              docker-tag:
-                ["8.2", "8.1", "8.0", "7.4", "7.3", "7.2", "7.1", "7.0", "5.6"]
+              docker-tag: [
+                  # "8.3",
+                  "8.2",
+                  # "8.1",
+                  # "8.0",
+                  # "7.4",
+                  # "7.3",
+                  # "7.2",
+                  # "7.1",
+                  # "7.0",
+                  # "5.6",
+                ]
       - trigger-pmvc:
           requires:
             - build-and-publish

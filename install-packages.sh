@@ -21,7 +21,7 @@ if [ $(echo "$INSTALL_VERSION >= 8.0" | bc -l) == 1 ] \
   ENABLE_GD="on"
 fi
 
-if [[ $(echo "$INSTALL_VERSION == 8.0" | bc -l) == 1 ]]; then
+if [[ $(echo "$INSTALL_VERSION == 8.2" | bc -l) == 1 ]]; then
   # svm librar (libgomp, libstdc++, libgcc)
   INSTALL="$INSTALL libgomp libstdc++ libgcc"
 
@@ -31,18 +31,22 @@ if [[ $(echo "$INSTALL_VERSION == 8.0" | bc -l) == 1 ]]; then
   # Not available in alpine3.15 docker images
   # ALT_VERSION=fpm-alpine3.14
   ##
-  BUILD_DEPS="$BUILD_DEPS lapack-dev libexecinfo-dev openblas-dev"
-  INSTALL="$INSTALL lapack libexecinfo openblas"
+  BUILD_DEPS="$BUILD_DEPS lapack-dev openblas-dev"
+  INSTALL="$INSTALL lapack openblas"
   PHP_EXT_ENABLE="$PHP_EXT_ENABLE tensor"
   PECL="$PECL tensor"
 fi
 
+###
 # xdbug
+# https://xdebug.org/download
+###
+
 if [[ $(echo "$INSTALL_VERSION >= 7.2" | bc -l) == 1 ]]; then
   # git use in php-coveralls/php-coveralls
   INSTALL="$INSTALL git"
   if [[ $(echo "$INSTALL_VERSION >= 8.1" | bc -l) == 1 ]]; then
-    PECL="$PECL xdebug-3.2.0"
+    PECL="$PECL xdebug-3.3.1"
   else
     PECL="$PECL xdebug-3.1.6"
   fi
