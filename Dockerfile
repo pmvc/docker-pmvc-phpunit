@@ -17,6 +17,7 @@ COPY ./docker/cacert.pem /usr/local/share/ca-certificates/cacert.pem
 COPY ./docker/composer.json /
 
 ENV COMPOSER_HOME=/.composer \
+    COMPOSER_ALLOW_SUPERUSER=1 \
     LANG=en_US.UTF-8 \
     LANGUAGE=en_US:en \ 
     LC_ALL=en_US.UTF-8 \

@@ -21,6 +21,9 @@ if [ $(echo "$INSTALL_VERSION >= 8.0" | bc -l) == 1 ] \
   ENABLE_GD="on"
 fi
 
+###
+# tensor
+###
 if [[ $(echo "$INSTALL_VERSION == 8.2" | bc -l) == 1 ]]; then
   # svm librar (libgomp, libstdc++, libgcc)
   INSTALL="$INSTALL libgomp libstdc++ libgcc"
@@ -32,7 +35,7 @@ if [[ $(echo "$INSTALL_VERSION == 8.2" | bc -l) == 1 ]]; then
   # ALT_VERSION=fpm-alpine3.14
   ##
   BUILD_DEPS="$BUILD_DEPS lapack-dev openblas-dev"
-  INSTALL="$INSTALL lapack openblas"
+  INSTALL="$INSTALL openblas lapack"
   PHP_EXT_ENABLE="$PHP_EXT_ENABLE tensor"
   PECL="$PECL tensor"
 fi
@@ -79,6 +82,10 @@ echo ""
 apk add --virtual .build-deps $BUILD_DEPS && apk add $INSTALL || exit 7
 
 #/* put your install code here */#
+
+if test -e /usr/lib/liblapacke.so.3 && ! test -e /usr/lib/liblapacke.so; then
+  ln -s /usr/lib/liblapacke.so.3 /usr/lib/liblapacke.so
+fi
 
 ###
 # workaround for php 8.0.15
