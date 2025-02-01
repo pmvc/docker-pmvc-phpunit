@@ -34,7 +34,7 @@ There are thee major phpunit version.
         -   https://php-ml.readthedocs.io/en/latest/machine-learning/regression/least-squares/
     -   RubixML
         -   https://docs.rubixml.com/1.0/index.html
-    -   RubixML tensor (Only in php 8.0 and alpine3.14)
+    -   RubixML tensor (Only in php 8.2 and alpine3.16)
         -   https://github.com/mlocati/docker-php-extension-installer#special-requirements-for-tensor
 
 ## GIT
