@@ -48,8 +48,8 @@ fi
 if [[ $(echo "$INSTALL_VERSION >= 7.2" | bc -l) == 1 ]]; then
   # git use in php-coveralls/php-coveralls
   INSTALL="$INSTALL git"
-  if [[ $(echo "$INSTALL_VERSION >= 8.1" | bc -l) == 1 ]]; then
-    PECL="$PECL xdebug-3.3.1"
+  if [[ $(echo "$INSTALL_VERSION >= 8.0" | bc -l) == 1 ]]; then
+    PECL="$PECL xdebug-3.4.1"
   else
     PECL="$PECL xdebug-3.1.6"
   fi
