@@ -3,48 +3,48 @@
 
 # PMVC PHPUNIT Docker Image
 
--   The latest locked version is `PHP 8.4`.
+- The latest locked version is `PHP 8.4`.
 
 ## phpunit version
 
 There are thee major phpunit version.
 
--   PHP 5.6 [7.0, 7.1] use phpunit 4.8.36
--   PHP 7.2 [7.3, 7.4] use phpunit 6.5.14
--   php 8.0 use phpunit 9.6.11
--   php 8.1 [8.2, 8.3, 8.4] use phpunit 10.3.3
--   phpunit support version
-    -   https://phpunit.de/supported-versions.html
+- PHP 5.6 [7.0, 7.1] use phpunit 4.8.36
+- PHP 7.2 [7.3, 7.4] use phpunit 6.5.14
+- php 8.0 use phpunit 9.6.11
+- php 8.1 [8.2, 8.3, 8.4] use phpunit 10.3.3
+- phpunit support version
+    - https://phpunit.de/supported-versions.html
 
 ## Features
 
--   support utc timezone without date_default_timezone_set
--   support phpunit [4.8.36 - 9.5.10]
--   support xdebug for code coverage [3.1.1]
-    -   support php-coveralls and https://coveralls.io/
--   support pmvc command line
--   support pdo-[mysql, pgsql, sqlite]
+- support utc timezone without date_default_timezone_set
+- support phpunit [4.8.36 - 9.5.10]
+- support xdebug for code coverage [3.1.1]
+    - support php-coveralls and https://coveralls.io/
+- support pmvc command line
+- support pdo-[mysql, pgsql, sqlite]
 
 ### Advance feature
 
--   GD only in [php 5.6 and 8.0 later]
--   NodeJS command for your frontend project.
--   Machine Learning (Need php7.4 later)
-    -   SVM Library
-        -   https://php-ml.readthedocs.io/en/latest/machine-learning/regression/least-squares/
-    -   RubixML
-        -   https://docs.rubixml.com/1.0/index.html
-    -   RubixML tensor (Only in php 8.2 and alpine3.16)
-        -   https://github.com/mlocati/docker-php-extension-installer#special-requirements-for-tensor
+- GD only in [php 5.6 and 8.0 later]
+- NodeJS command for your frontend project.
+- Machine Learning (Need php7.4 later)
+    - SVM Library
+        - https://php-ml.readthedocs.io/en/latest/machine-learning/regression/least-squares/
+    - RubixML
+        - https://docs.rubixml.com/1.0/index.html
+    - RubixML tensor (Only in php 8.2 and alpine3.16)
+        - https://github.com/mlocati/docker-php-extension-installer#special-requirements-for-tensor
 
 ## GIT
 
--   https://github.com/pmvc/docker-pmvc-phpunit
+- https://github.com/pmvc/docker-pmvc-phpunit
 
 ## Docker hub
 
--   Image Name: allfunc/pmvc-phpunit
--   https://hub.docker.com/r/allfunc/pmvc-phpunit
+- Image Name: allfunc/pmvc-phpunit
+- https://hub.docker.com/r/allfunc/pmvc-phpunit
 
 ### Check entrypoint
 
@@ -52,15 +52,22 @@ There are thee major phpunit version.
 docker run --rm allfunc/pmvc-phpunit cat /usr/local/bin/docker-php-entrypoint
 ```
 
-## Troubleshooting
+## Test gist with docker run
 
-https://github.com/pmvc/docker-pmvc-phpunit/blob/main/bin/README.md
+```
+curl https://gist.githubusercontent.com/HillLiu/fa84bc3327cdccc248c5484f4df05755/raw/a8c6ae3e5ed9473d04432423182c79f7e36ebf4c/demo-7x8x-mixed.php | docker run --rm -i allfunc/pmvc-phpunit:8.1 php
+
+curl https://gist.githubusercontent.com/HillLiu/fa84bc3327cdccc248c5484f4df05755/raw/a8c6ae3e5ed9473d04432423182c79f7e36ebf4c/demo-7x8x-mixed.php | docker run --rm -i allfunc/pmvc-phpunit:7.4 php
+```
+
+- More examples (You do not need to install PHP on your computer.)
+    - https://github.com/pmvc/docker-pmvc-phpunit/blob/main/bin/README.md
 
 ## Use with CircleCI
 
 Build your ci within 3 run command.
 
--   [CircleCI configure file example](https://github.com/pmvc/generator-php-pmvc-plugin/blob/master/generators/app/templates/_circleci/config.yml)
--   [Real CircleCI demo](https://app.circleci.com/pipelines/github/pmvc/pmvc)
+- [CircleCI configure file example](https://github.com/pmvc/generator-php-pmvc-plugin/blob/master/generators/app/templates/_circleci/config.yml)
+- [Real CircleCI demo](https://app.circleci.com/pipelines/github/pmvc/pmvc)
 
 MIT 2025
