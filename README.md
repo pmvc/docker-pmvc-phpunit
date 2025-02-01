@@ -3,7 +3,7 @@
 
 # PMVC PHPUNIT Docker Image
 
--   The latest locked version is `PHP 8.1`, but you can use `PHP 8.2` by specifying tag.
+-   The latest locked version is `PHP 8.4`.
 
 ## phpunit version
 
@@ -12,7 +12,7 @@ There are thee major phpunit version.
 -   PHP 5.6 [7.0, 7.1] use phpunit 4.8.36
 -   PHP 7.2 [7.3, 7.4] use phpunit 6.5.14
 -   php 8.0 use phpunit 9.6.11
--   php 8.1 [8.2] use phpunit 10.3.3 
+-   php 8.1 [8.2, 8.3, 8.4] use phpunit 10.3.3
 -   phpunit support version
     -   https://phpunit.de/supported-versions.html
 
@@ -63,4 +63,4 @@ Build your ci within 3 run command.
 -   [CircleCI configure file example](https://github.com/pmvc/generator-php-pmvc-plugin/blob/master/generators/app/templates/_circleci/config.yml)
 -   [Real CircleCI demo](https://app.circleci.com/pipelines/github/pmvc/pmvc)
 
-MIT 2023
+MIT 2025
