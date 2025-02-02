@@ -38,6 +38,7 @@ if [[ $(echo "$INSTALL_VERSION == 8.2" | bc -l) == 1 ]]; then
   BUILD_DEPS="$BUILD_DEPS lapack-dev openblas-dev"
   INSTALL="$INSTALL openblas lapack"
   PHP_EXT_ENABLE="$PHP_EXT_ENABLE tensor"
+  PHP_EXT="$PHP_EXT mysqli"
   PECL="$PECL tensor"
 fi
 
