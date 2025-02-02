@@ -8,6 +8,7 @@ BUILD_DEPS="$PHPIZE_DEPS musl-dev build-base postgresql-dev linux-headers"
 
 INSTALL="postgresql-libs"
 
+# https://github.com/mlocati/docker-php-extension-installer
 PHP_EXT="pcntl sockets pdo_pgsql pdo_mysql"
 
 PHP_EXT_ENABLE=""
