@@ -41,7 +41,7 @@ jobs:
       - setup_remote_docker:
           # https://circleci.com/docs/building-docker-images/#docker-version
           version: 20.10.24
-          docker_layer_caching: true
+          docker_layer_caching: false
       - run:
           name: "Test with terratest"
           command: |
@@ -57,7 +57,7 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker:
-          docker_layer_caching: true
+          docker_layer_caching: false
       - run:
           name: Log time
           command: date
