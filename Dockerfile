@@ -38,8 +38,13 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 RUN if [[ $(echo "$VERSION <= 7.1" | bc -l) == 1 ]] ; then composer global require phpunit/phpunit 4.8.36 ; \
   elif [[ $(echo "$VERSION <= 7.4" | bc -l) == 1 ]] ; then composer global require phpunit/phpunit 6.5.14 ; \
   elif [[ $(echo "$VERSION <= 8.0" | bc -l) == 1 ]] ; then composer global require phpunit/phpunit 9.6.11 ; \
+  elif [[ $(echo "$VERSION <= 8.1" | bc -l) == 1 ]] ; then composer global require \
+    phpunit/phpunit ^10.5 \
+    php-coveralls/php-coveralls \
+    && ln -s /.composer/vendor/bin/php-coveralls /usr/local/bin/coveralls \
+  ; \
   else composer global require \
-    phpunit/phpunit 10.3.3 \
+    phpunit/phpunit ^11.5 \
     php-coveralls/php-coveralls \
     && ln -s /.composer/vendor/bin/php-coveralls /usr/local/bin/coveralls \
   ; fi \
