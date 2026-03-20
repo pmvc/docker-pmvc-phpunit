@@ -36,8 +36,8 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && mv composer.phar /usr/local/bin/composer
 
 RUN if [[ $(echo "$VERSION <= 7.1" | bc -l) == 1 ]] ; then composer global require phpunit/phpunit 4.8.36 ; \
-  elif [[ $(echo "$VERSION <= 7.4" | bc -l) == 1 ]] ; then composer global require phpunit/phpunit 6.5.14 ; \
-  elif [[ $(echo "$VERSION <= 8.0" | bc -l) == 1 ]] ; then composer global require phpunit/phpunit 9.6.11 ; \
+  elif [[ $(echo "$VERSION <= 7.2" | bc -l) == 1 ]] ; then composer global require phpunit/phpunit 8.5.52 ; \
+  elif [[ $(echo "$VERSION <= 8.0" | bc -l) == 1 ]] ; then composer global require phpunit/phpunit ^9.6 ; \
   elif [[ $(echo "$VERSION <= 8.1" | bc -l) == 1 ]] ; then composer global require \
     phpunit/phpunit ^10.5 \
     php-coveralls/php-coveralls \
