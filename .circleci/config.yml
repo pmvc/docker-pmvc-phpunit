@@ -24,7 +24,11 @@ commands:
             mkdir -vp ~/.docker/cli-plugins/
             curl --silent -L "https://github.com/docker/buildx/releases/download/<< parameters.buildx-version >>/buildx-<< parameters.buildx-version >>.linux-arm64" > ~/.docker/cli-plugins/docker-buildx
             chmod a+x ~/.docker/cli-plugins/docker-buildx
-            docker buildx create --name joyful-<< parameters.docker-tag >>- --append CIContext --use
+            cat > /tmp/buildkitd.toml \<< 'EOF'
+            [registry."docker.io"]
+              mirrors = ["mirror.gcr.io", "public.ecr.aws"]
+            EOF
+            docker buildx create --name joyful-<< parameters.docker-tag >>- --append CIContext --config /tmp/buildkitd.toml --use
 
 executors:
   docker-publisher:
