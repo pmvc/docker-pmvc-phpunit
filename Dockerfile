@@ -48,12 +48,14 @@ RUN if [[ $(echo "$VERSION <= 7.1" | bc -l) == 1 ]] ; then composer global requi
     php-coveralls/php-coveralls \
     && ln -s /.composer/vendor/bin/php-coveralls /usr/local/bin/coveralls \
   ; fi \
-  && composer global require pmvc/pmvc-cli:^0.6.4 \
+  && composer global require pmvc/pmvc-cli:^0.6.4 squizlabs/php_codesniffer:^3.11 \
   && cd / && composer update \
   && chmod 0777 /.composer \
   && chmod 0777 -R /.composer/cache \
   && ln -s /.composer/vendor/bin/pmvc /usr/local/bin/ \
-  && ln -s /.composer/vendor/bin/phpunit /usr/local/bin/
+  && ln -s /.composer/vendor/bin/phpunit /usr/local/bin/ \
+  && ln -s /.composer/vendor/bin/phpcs /usr/local/bin/ \
+  && ln -s /.composer/vendor/bin/phpcbf /usr/local/bin/
 
 # fixed timezone
 # https://stackoverflow.com/questions/45587214/configure-timezone-in-dockerized-nginx-php-fpm/45587945
