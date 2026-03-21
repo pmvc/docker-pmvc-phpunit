@@ -35,8 +35,8 @@ if [[ $(echo "$INSTALL_VERSION == 8.2" | bc -l) == 1 ]]; then
   # Not available in alpine3.15 docker images
   # ALT_VERSION=fpm-alpine3.14
   ##
-  BUILD_DEPS="$BUILD_DEPS lapack-dev openblas-dev"
-  INSTALL="$INSTALL openblas lapack"
+  BUILD_DEPS="$BUILD_DEPS openblas-dev"
+  INSTALL="$INSTALL openblas"
   PHP_EXT_ENABLE="$PHP_EXT_ENABLE tensor"
   PHP_EXT="$PHP_EXT mysqli"
   PECL="$PECL tensor"
