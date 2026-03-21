@@ -142,6 +142,17 @@ restore() {
   docker save --output $archiveFile $localImage
 }
 
+unittest() {
+  TERRATEST=$(${DIR}/support/TERRATEST.sh)
+
+  docker run --rm \
+    -v $DIR:/app/test \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -w /app/test \
+    $TERRATEST \
+    go test -timeout 30m -v ./tests
+}
+
 case "$1" in
   save)
     save
@@ -170,6 +181,9 @@ case "$1" in
   auto)
     build
     tag
+    ;;
+  test)
+    unittest
     ;;
   b)
     build

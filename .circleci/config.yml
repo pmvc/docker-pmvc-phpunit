@@ -94,7 +94,7 @@ jobs:
             BUILD_FOLDER=${VER_PREFIX}-<< parameters.docker-tag >>
             BUILD_ARG="--build-arg BUILDKIT_INLINE_CACHE=1"
             LATEST_TAG=""
-            if [ "x8.2" == "x$BUILD_VERSION" ]; then
+            if [ "x8.3" == "x$BUILD_VERSION" ]; then
                 if [ -n "${ALT_VERSION}" ]; then
                   BUILD_ARG="--build-arg ALT_VERSION=${ALT_VERSION}"
                   docker pull php:${BUILD_VERSION}-${ALT_VERSION:-fpm-alpine}
