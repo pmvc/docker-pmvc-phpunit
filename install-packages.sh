@@ -23,23 +23,12 @@ if [ $(echo "$INSTALL_VERSION >= 8.0" | bc -l) == 1 ] \
 fi
 
 ###
-# tensor
+# svm and mysqli
 ###
-if [[ $(echo "$INSTALL_VERSION == 8.2" | bc -l) == 1 ]]; then
-  # svm librar (libgomp, libstdc++, libgcc)
+if [[ $(echo "$INSTALL_VERSION == 8.5" | bc -l) == 1 ]]; then
+  # svm library (libgomp, libstdc++, libgcc)
   INSTALL="$INSTALL libgomp libstdc++ libgcc"
-
-  ##
-  # tensor
-  # https://github.com/mlocati/docker-php-extension-installer#special-requirements-for-tensor
-  # Not available in alpine3.15 docker images
-  # ALT_VERSION=fpm-alpine3.14
-  ##
-  BUILD_DEPS="$BUILD_DEPS openblas-dev"
-  INSTALL="$INSTALL openblas"
-  PHP_EXT_ENABLE="$PHP_EXT_ENABLE tensor"
   PHP_EXT="$PHP_EXT mysqli"
-  PECL="$PECL tensor"
 fi
 
 ###
@@ -86,10 +75,6 @@ echo ""
 apk add --virtual .build-deps $BUILD_DEPS && apk add $INSTALL || exit 7
 
 #/* put your install code here */#
-
-if test -e /usr/lib/liblapacke.so.3 && ! test -e /usr/lib/liblapacke.so; then
-  ln -s /usr/lib/liblapacke.so.3 /usr/lib/liblapacke.so
-fi
 
 ###
 # workaround for php 8.0.15
