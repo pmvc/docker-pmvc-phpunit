@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 MY_PWD=$(pwd)
-CMD=${CMD:-pmvc}
+VERSION=${VERSION:-latest}
+CMD=${CMD:-php}
 
 BASE_DIRECTORY=$(echo "$MY_PWD" | cut -d "/" -f2)
 
@@ -40,7 +41,7 @@ cli+=" -v $MOUNT:$MOUNT";
 cli+=" -v /etc/passwd:/etc/passwd";
 cli+=" -w $MY_PWD";
 cli+=" -u $(id -u):$(id -g)";
-cli+=" --name phpunit-${pid} allfunc/pmvc-phpunit"
-cli+=" php ${C}"
+cli+=" --name phpunit-${pid} allfunc/pmvc-phpunit:${VERSION}"
+cli+=" $CMD ${C}"
 
 bash -c "$cli";
