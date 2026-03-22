@@ -5,21 +5,22 @@ VERSION=${VERSION:-latest}
 CMD=${CMD:-phpunit}
 
 C=''
-for i in "$@"; do 
-    i="${i//\\/\\\\}"
-    C="$C \"${i//\"/\\\"}\""
+for i in "$@"; do
+  i="${i//\\/\\\\}"
+  C="$C \"${i//\"/\\\"}\""
 done
 
 pid=$$
 
-cli='env docker run --rm';
+cli='env docker run --rm'
 if [ "xbash" == "x$CMD" ]; then
-  cli+=" -it";
+  cli+=" -it"
 fi
-cli+=" -v $MY_PWD:$MY_PWD";
-cli+=" -w $MY_PWD";
-cli+=" -u $(id -u):$(id -g)";
+cli+=" -v $MY_PWD:$MY_PWD"
+cli+=" -w $MY_PWD"
+cli+=" -u $(id -u):$(id -g)"
+cli+=" -e XDEBUG_MODE=coverage"
 cli+=" --name phpunit-${pid} allfunc/pmvc-phpunit:${VERSION}"
 cli+=" $CMD ${C}"
 
-bash -c "$cli";
+bash -c "$cli"

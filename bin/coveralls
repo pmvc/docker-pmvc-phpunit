@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+MY_PWD=$(pwd)
+VERSION=${VERSION:-8.3}
+CMD=${CMD:-coveralls}
+
+C=''
+for i in "$@"; do
+  i="${i//\\/\\\\}"
+  C="$C \"${i//\"/\\\"}\""
+done
+
+pid=$$
+
+cli='env docker run --rm'
+if [ "xbash" == "x$CMD" ]; then
+  cli+=" -it"
+fi
+cli+=" -v $MY_PWD:$MY_PWD"
+cli+=" -w $MY_PWD"
+cli+=" -u $(id -u):$(id -g)"
+if [ -z "$TRAVIS" ] && [ -z "$CIRCLECI" ] && [ -z "$GITHUB_ACTIONS" ]; then
+  cli+=" -e COVERALLS_RUN_LOCALLY=1"
+fi
+cli+=" --name phpunit-${pid} allfunc/pmvc-phpunit:${VERSION}"
+cli+=" $CMD --coverage_clover=clover.xml -v -o coveralls-upload.json ${C}"
+
+bash -c "$cli"
+if [ -z "$TRAVIS" ] && [ -z "$CIRCLECI" ] && [ -z "$GITHUB_ACTIONS" ] && [ -z "$COVERALLS_REPO_TOKEN" ]; then
+  exit 0
+fi
