@@ -40,15 +40,16 @@ RUN if [[ $(echo "$VERSION <= 7.1" | bc -l) == 1 ]] ; then composer global requi
   elif [[ $(echo "$VERSION <= 8.0" | bc -l) == 1 ]] ; then composer global require phpunit/phpunit ^9.6 ; \
   elif [[ $(echo "$VERSION <= 8.2" | bc -l) == 1 ]] ; then composer global require \
     phpunit/phpunit ^10.5 \
+  ; \
+  elif [[ $(echo "$VERSION <= 8.3" | bc -l) == 1 ]] ; then composer global require \
+    phpunit/phpunit ^12.5 \
     php-coveralls/php-coveralls \
     && ln -s /.composer/vendor/bin/php-coveralls /usr/local/bin/coveralls \
   ; \
   else composer global require \
-    phpunit/phpunit ^11.5 \
-    php-coveralls/php-coveralls \
-    && ln -s /.composer/vendor/bin/php-coveralls /usr/local/bin/coveralls \
+    phpunit/phpunit ^13.0 \
   ; fi \
-  && composer global require pmvc/pmvc-cli:^0.6.4 squizlabs/php_codesniffer:^3.11 \
+  && composer global require pmvc/pmvc-cli:^85.0.0 squizlabs/php_codesniffer:^3.11 \
   && cd / && composer update \
   && chmod 0777 /.composer \
   && chmod 0777 -R /.composer/cache \
