@@ -1,4 +1,3 @@
-
 ARG VERSION=${VERSION:-[VERSION]}
 ARG ALT_VERSION=${ALT_VERSION:-fpm-alpine}
 
@@ -9,46 +8,35 @@ FROM php:${VERSION}-${ALT_VERSION}
 ARG VERSION
 
 COPY --from=builder \
-    /usr/local/bin/svm-train \
-    /usr/local/bin/svm-predict \
-    /usr/local/bin/svm-scale \
-    /usr/local/bin/
+  /usr/local/bin/svm-train \
+  /usr/local/bin/svm-predict \
+  /usr/local/bin/svm-scale \
+  /usr/local/bin/
 COPY ./docker/cacert.pem /usr/local/share/ca-certificates/cacert.pem
 COPY ./docker/composer.json /
 
 ENV COMPOSER_HOME=/.composer \
-    COMPOSER_ALLOW_SUPERUSER=1 \
-    LANG=en_US.UTF-8 \
-    LANGUAGE=en_US:en \ 
-    LC_ALL=en_US.UTF-8 \
-    PATH=$PATH:./node_modules/.bin:./vendor/bin
+  COMPOSER_ALLOW_SUPERUSER=1 \
+  LANG=en_US.UTF-8 \
+  LANGUAGE=en_US:en \ 
+LC_ALL=en_US.UTF-8 \
+  PATH=$PATH:./node_modules/.bin:./vendor/bin
 
 # apk
-COPY ./install-packages.sh /usr/local/bin/install-packages
+COPY ./docker/install-phpunit ./docker/install-packages /usr/local/bin/
 RUN apk update && apk add bash bc \
   && INSTALL_VERSION=$VERSION install-packages \
-  && rm /usr/local/bin/install-packages;
+  && rm /usr/local/bin/install-packages
 
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
-    && php -r "if (hash_file('sha384', 'composer-setup.php') === file_get_contents('https://raw.githubusercontent.com/composer/composer.github.io/main/installer.sig')) { echo 'Installer verified'; } else { fwrite(STDERR, 'Verify composer signature failed.'); unlink('composer-setup.php'); } echo PHP_EOL;" \
-    && php composer-setup.php \
-    && php -r "unlink('composer-setup.php');" \
-    && mv composer.phar /usr/local/bin/composer
+  && php -r "if (hash_file('sha384', 'composer-setup.php') === file_get_contents('https://raw.githubusercontent.com/composer/composer.github.io/main/installer.sig')) { echo 'Installer verified'; } else { fwrite(STDERR, 'Verify composer signature failed.'); unlink('composer-setup.php'); } echo PHP_EOL;" \
+  && php composer-setup.php \
+  && php -r "unlink('composer-setup.php');" \
+  && mv composer.phar /usr/local/bin/composer \
+  && /usr/local/bin/composer --version
 
-RUN if [[ $(echo "$VERSION <= 7.1" | bc -l) == 1 ]] ; then composer global require phpunit/phpunit 4.8.36 ; \
-  elif [[ $(echo "$VERSION <= 7.2" | bc -l) == 1 ]] ; then composer global require phpunit/phpunit 8.5.52 ; \
-  elif [[ $(echo "$VERSION <= 8.0" | bc -l) == 1 ]] ; then composer global require phpunit/phpunit ^9.6 ; \
-  elif [[ $(echo "$VERSION <= 8.2" | bc -l) == 1 ]] ; then composer global require \
-    phpunit/phpunit ^10.5 \
-  ; \
-  elif [[ $(echo "$VERSION <= 8.3" | bc -l) == 1 ]] ; then composer global require \
-    phpunit/phpunit ^12.5 \
-    php-coveralls/php-coveralls \
-    && ln -s /.composer/vendor/bin/php-coveralls /usr/local/bin/coveralls \
-  ; \
-  else composer global require \
-    phpunit/phpunit ^13.0 \
-  ; fi \
+RUN chmod +x /usr/local/bin/install-phpunit \
+  && install-phpunit \
   && composer global require pmvc/pmvc-cli:^85.0.0 squizlabs/php_codesniffer:^3.11 \
   && cd / && composer update \
   && chmod 0777 /.composer \
@@ -56,7 +44,8 @@ RUN if [[ $(echo "$VERSION <= 7.1" | bc -l) == 1 ]] ; then composer global requi
   && ln -s /.composer/vendor/bin/pmvc /usr/local/bin/ \
   && ln -s /.composer/vendor/bin/phpunit /usr/local/bin/ \
   && ln -s /.composer/vendor/bin/phpcs /usr/local/bin/ \
-  && ln -s /.composer/vendor/bin/phpcbf /usr/local/bin/
+  && ln -s /.composer/vendor/bin/phpcbf /usr/local/bin/ \
+  && rm /usr/local/bin/install-phpunit
 
 # fixed timezone
 # https://stackoverflow.com/questions/45587214/configure-timezone-in-dockerized-nginx-php-fpm/45587945
