@@ -51,6 +51,10 @@ RUN chmod +x /usr/local/bin/install-phpunit \
 # https://stackoverflow.com/questions/45587214/configure-timezone-in-dockerized-nginx-php-fpm/45587945
 RUN printf '[PHP]\ndate.timezone = "UTC"\n' > /usr/local/etc/php/conf.d/tzone.ini
 
+# CVE-2026-109618 / CVE-2026-109619 mitigations
+# https://www.php.net/archive/2026.php#2026-10-21-5
+COPY ./docker/security.ini /usr/local/etc/php/conf.d/security.ini
+
 VOLUME ["/.composer"]
 WORKDIR /var/www/html
 

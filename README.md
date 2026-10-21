@@ -9,8 +9,7 @@
 
 There are six major phpunit version.
 
-- PHP 5.6 [7.0, 7.1] use phpunit 4.8.36
-- PHP 7.2 [7.3, 7.4] use phpunit 8.5.52
+- PHP 7.4 use phpunit 8.5.52
 - PHP 8.0 use phpunit ^9.6
 - PHP 8.1 [8.2] use phpunit ^10.5
 - PHP 8.3 use phpunit ^12.5
@@ -29,7 +28,7 @@ There are six major phpunit version.
 
 ### Advance feature
 
-- GD only in [php 5.6 and 8.0 later]
+- GD only in [8.0 later]
 - NodeJS command for your frontend project.
 - Machine Learning (Need php7.4 later)
     - SVM Library
