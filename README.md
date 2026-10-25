@@ -7,11 +7,9 @@
 
 ## phpunit version
 
-There are six major phpunit version.
+There are three major phpunit versions.
 
-- PHP 7.4 use phpunit 8.5.52
-- PHP 8.0 use phpunit ^9.6
-- PHP 8.1 [8.2] use phpunit ^10.5
+- PHP 8.2 use phpunit ^10.5
 - PHP 8.3 use phpunit ^12.5
 - PHP 8.4 [8.5] use phpunit ^13.0
 - phpunit support version
@@ -20,17 +18,17 @@ There are six major phpunit version.
 ## Features
 
 - support utc timezone without date_default_timezone_set
-- support phpunit [4.8.36 - 13.x]
-- support xdebug for code coverage [3.1.6 - 3.5.1]
+- support phpunit [10.5 - 13.x]
+- support xdebug for code coverage [3.4.1 - 3.5.1]
     - support php-coveralls and https://coveralls.io/
 - support pmvc command line
 - support pdo-[mysql, pgsql, sqlite]
+- support gd
 
 ### Advance feature
 
-- GD only in [8.0 later]
 - NodeJS command for your frontend project.
-- Machine Learning (Need php7.4 later)
+- Machine Learning
     - SVM Library
         - https://php-ml.readthedocs.io/en/latest/machine-learning/regression/least-squares/
     - RubixML
@@ -56,9 +54,9 @@ docker run --rm allfunc/pmvc-phpunit cat /usr/local/bin/docker-php-entrypoint
 ## Test gist with docker run
 
 ```
-curl https://gist.githubusercontent.com/HillLiu/fa84bc3327cdccc248c5484f4df05755/raw/a8c6ae3e5ed9473d04432423182c79f7e36ebf4c/demo-7x8x-mixed.php | docker run --rm -i allfunc/pmvc-phpunit:8.1 php
+curl https://gist.githubusercontent.com/HillLiu/fa84bc3327cdccc248c5484f4df05755/raw/a8c6ae3e5ed9473d04432423182c79f7e36ebf4c/demo-7x8x-mixed.php | docker run --rm -i allfunc/pmvc-phpunit:8.5 php
 
-curl https://gist.githubusercontent.com/HillLiu/fa84bc3327cdccc248c5484f4df05755/raw/a8c6ae3e5ed9473d04432423182c79f7e36ebf4c/demo-7x8x-mixed.php | docker run --rm -i allfunc/pmvc-phpunit:7.4 php
+curl https://gist.githubusercontent.com/HillLiu/fa84bc3327cdccc248c5484f4df05755/raw/a8c6ae3e5ed9473d04432423182c79f7e36ebf4c/demo-7x8x-mixed.php | docker run --rm -i allfunc/pmvc-phpunit:8.2 php
 ```
 
 - More examples (You do not need to install PHP on your computer.)

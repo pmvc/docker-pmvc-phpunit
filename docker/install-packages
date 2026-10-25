@@ -15,12 +15,9 @@ PHP_EXT_ENABLE=""
 
 PECL=""
 
-if [ $(echo "$INSTALL_VERSION >= 8.0" | bc -l) == 1 ] \
-  || [ $(echo "$INSTALL_VERSION == 5.6" | bc -l) == 1 ]; then
-  BUILD_DEPS="$BUILD_DEPS freetype-dev libjpeg-turbo-dev libpng-dev libwebp-dev zlib-dev libvpx-dev"
-  INSTALL="$INSTALL freetype libjpeg-turbo libpng libwebp libvpx"
-  ENABLE_GD="on"
-fi
+# gd is available on every PHP version this image ships
+BUILD_DEPS="$BUILD_DEPS freetype-dev libjpeg-turbo-dev libpng-dev libwebp-dev zlib-dev libvpx-dev"
+INSTALL="$INSTALL freetype libjpeg-turbo libpng libwebp libvpx"
 
 ###
 # svm and mysqli
@@ -36,28 +33,17 @@ fi
 # https://xdebug.org/download
 ###
 
-if [[ $(echo "$INSTALL_VERSION >= 7.2" | bc -l) == 1 ]]; then
-  # git use in php-coveralls/php-coveralls
-  INSTALL="$INSTALL git"
-  if [[ $(echo "$INSTALL_VERSION >= 8.5" | bc -l) == 1 ]]; then
-    PECL="$PECL xdebug-3.5.1"
-  elif [[ $(echo "$INSTALL_VERSION >= 8.0" | bc -l) == 1 ]]; then
-    PECL="$PECL xdebug-3.4.1"
-  else
-    PECL="$PECL xdebug-3.1.6"
-  fi
-  PHP_EXT_ENABLE="$PHP_EXT_ENABLE xdebug"
+# git use in php-coveralls/php-coveralls
+INSTALL="$INSTALL git"
+if [[ $(echo "$INSTALL_VERSION >= 8.5" | bc -l) == 1 ]]; then
+  PECL="$PECL xdebug-3.5.1"
+else
+  PECL="$PECL xdebug-3.4.1"
 fi
+PHP_EXT_ENABLE="$PHP_EXT_ENABLE xdebug"
 
 # nodejs
-INSTALL="$INSTALL nodejs"
-if [[ $(echo "$INSTALL_VERSION == 7.0" | bc -l) == 1 ]]; then
-  INSTALL="$INSTALL yarn"
-elif [[ $(echo "$INSTALL_VERSION == 5.5" | bc -l) == 1 ]]; then
-  INSTALL="$INSTALL ca-certificates"
-else
-  INSTALL="$INSTALL npm yarn"
-fi
+INSTALL="$INSTALL nodejs npm yarn"
 
 echo "###"
 echo "# Will install build tool"
@@ -76,20 +62,10 @@ apk add --virtual .build-deps $BUILD_DEPS && apk add $INSTALL || exit 7
 
 #/* put your install code here */#
 
-###
-# workaround for php 8.0.15
-# https://github.com/docker-library/php/issues/1245#issuecomment-1020475243
-###
-CFLAGS="$CFLAGS -D_GNU_SOURCE" docker-php-ext-install $PHP_EXT
+docker-php-ext-install $PHP_EXT
 
-if [ ! -z "$ENABLE_GD" ]; then
-  if [[ $(echo "$INSTALL_VERSION >= 8.0" | bc -l) == 1 ]]; then
-    docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp || exit 6
-  else
-    docker-php-ext-configure gd --with-freetype-dir=/usr/include --with-jpeg-dir=/usr/include --with-vpx-dir=/usr/include --with-gd || exit 5
-  fi
-  docker-php-ext-install -j$(getconf _NPROCESSORS_ONLN) gd || exit 4
-fi
+docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp || exit 6
+docker-php-ext-install -j$(getconf _NPROCESSORS_ONLN) gd || exit 4
 
 if [ "x$PECL" != "x" ]; then
   echo "###"
@@ -110,8 +86,6 @@ if [ "x$PHP_EXT_ENABLE" != "x" ]; then
   echo ""
   docker-php-ext-enable $PHP_EXT_ENABLE || exit 2
 fi
-
-if [[ $(echo "$INSTALL_VERSION == 5.5" | bc -l) == 1 ]]; then update-ca-certificates; fi
 
 apk del -f .build-deps && rm -rf /var/cache/apk/* || exit 1
 

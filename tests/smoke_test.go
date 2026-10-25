@@ -22,15 +22,6 @@ var securityFloor = map[string]string{
 	"8.2": "8.2.35",
 }
 
-// eolVersions are past PHP's security support. Upstream publishes no patched
-// release for them, so there is no version to gate on and the image is
-// accepted as-is.
-var eolVersions = map[string]bool{
-	"8.1": true,
-	"8.0": true,
-	"7.4": true,
-}
-
 // phpVersionPattern matches the version line of `php -v`, skipping any warning
 // line an extension prints ahead of it.
 var phpVersionPattern = regexp.MustCompile(`(?m)^PHP\s+(\d+\.\d+\.\d+)`)
@@ -103,10 +94,6 @@ func TestSmoke(t *testing.T) {
 	// fix for CVE-2026-109618 / CVE-2026-109619. A frozen base tag keeps
 	// resolving to an old patch release without any visible error.
 	minor := strings.TrimSpace(string(VERSION))
-	if eolVersions[minor] {
-		t.Logf("PHP %s is past end of life and has no patched release, so no security floor applies", minor)
-		return
-	}
 	minimum, gated := securityFloor[minor]
 	if !gated {
 		return
